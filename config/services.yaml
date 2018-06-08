@@ -24,5 +24,15 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Event\RegistrationSubscriber:
+        arguments:
+            - "@service_container"
+
+    app.security.authentication_event_listener:
+        class: App\Event\SecuritySubscriber
+        arguments:
+            - "@service_container"
+            - "@security.token_storage"
+            - "@security.authentication_utils"
+        tags:
+            - { name: kernel.event_subscriber }

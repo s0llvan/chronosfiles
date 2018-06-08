@@ -56,6 +56,11 @@ class User implements UserInterface, \Serializable
      */
     private $roles = [];
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $encryptionKey;
+
     public function getId(): int
     {
         return $this->id;
@@ -151,5 +156,17 @@ class User implements UserInterface, \Serializable
     public function unserialize($serialized): void
     {
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    public function getEncryptionKey(): ?string
+    {
+        return $this->encryptionKey;
+    }
+
+    public function setEncryptionKey(string $encryptionKey): self
+    {
+        $this->encryptionKey = $encryptionKey;
+
+        return $this;
     }
 }
