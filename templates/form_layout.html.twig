@@ -1,0 +1,21 @@
+{% block form_widget_simple %}
+{% set type = type|default('text') %}
+<div class="field">
+    {% block form_label %}
+    {% if not compound %}
+    {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+    {% set label = name|humanize %}
+    {% endif %}
+    {% if label != 'Token' %}
+    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+    {% endif %}
+{% endblock form_label %}
+
+<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+</div>
+{% endblock form_widget_simple %}

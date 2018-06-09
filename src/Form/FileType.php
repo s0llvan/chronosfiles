@@ -15,7 +15,11 @@ class FileType extends AbstractType
     {
         $builder
             ->add('fileName', FormFileType::class)
-            ->add('upload', SubmitType::class)
+            ->add('upload', SubmitType::class, [
+                'attr' => [
+                    'class' => 'ui button'
+                ]
+            ])
         ;
     }
 

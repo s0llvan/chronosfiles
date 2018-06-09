@@ -19,7 +19,11 @@ class UserType extends AbstractType
         ->add('username', TextType::class)
         ->add('email', EmailType::class)
         ->add('password', PasswordType::class)
-        ->add('register', SubmitType::class)
+        ->add('register', SubmitType::class, [
+            'attr' => [
+                'class' => 'ui button'
+            ]
+        ])
         ;
     }
 

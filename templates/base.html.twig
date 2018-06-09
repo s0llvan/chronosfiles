@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js" charset="utf-8"></script>
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-    <nav>
-        <ul>
+    <div class="ui menu">
+        <div class="ui container">
+            <div class="header item">
+                ChronosFiles
+            </div>
+            <a class="item" href="{{ path('index') }}">
+                Home
+            </a>
             {% if app.user %}
-            <li>
-                <a href="{{ path('files') }}">Files</a>
-            </li>
-            <li>
-                <a href="{{ path('upload') }}">Upload</a>
-            </li>
-            <li>
-                <a href="{{ path('logout') }}">Logout</a>
-            </li>
+            <a class="item" href="{{ path('files') }}">
+                Files
+            </a>
+            <a class="item" href="{{ path('upload') }}">
+                Upload
+            </a>
+            <div class="right item">
+                <a href="{{ path('logout') }}">
+                    Logout
+                </a>
+            </div>
             {% else %}
-            <li>
-                <a href="{{ path('register') }}">Register</a>
-            </li>
-            <li>
-                <a href="{{ path('login') }}">Login</a>
-            </li>
+            <div class="right menu">
+                <a class="item" href="{{ path('register') }}">Register</a>
+                <a class="item" href="{{ path('login') }}">Login</a>
+            </div>
             {% endif %}
-        </ul>
-    </nav>
+        </div>
+    </div>
 
-    {% block body %}{% endblock %}
+    <div class="ui main container">
+        {% block body %}{% endblock %}
+    </div>
     {% block javascripts %}{% endblock %}
 </body>
 </html>
