@@ -79,4 +79,38 @@ class FileController extends Controller
         $response->deleteFileAfterSend(true);
         return $response;
     }
+
+    /**
+    * @Route("/delete/{fileNameLocation}", name="delete")
+    */
+    public function delete(string $fileNameLocation)
+    {
+        $user_key_encoded = $this->get('session')->get('encryption_key');
+        $user_key = Key::loadFromAsciiSafeString($user_key_encoded);
+
+        $fileNameLocation = Crypto::decrypt($fileNameLocation, $user_key);
+        $filePath = $this->getParameter('upload_directory') . $fileNameLocation;
+
+        $file = $this->getDoctrine()
+        ->getRepository(File::class)
+        ->findOneByFileNameLocation($fileNameLocation);
+
+        if (!$file) {
+            return $this->redirect($this->generateUrl('files'));
+        }
+
+        if($file->getUser() != $this->getUser()) {
+            return $this->redirect($this->generateUrl('files'));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($file);
+        $em->flush();
+
+        if(file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        return $this->redirect($this->generateUrl('files'));
+    }
 }

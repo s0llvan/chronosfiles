@@ -9,6 +9,7 @@
             <th>Name</th>
             <th>Size</th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
 
@@ -19,6 +20,9 @@
             <td>{{ (file.fileSize / 1024 / 1024)|round(2) }} Mo</td>
             <td>
                 <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">Download</a>
+            </td>
+            <td>
+                <a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">Delete</a>
             </td>
         </tr>
         {% endfor %}
