@@ -40,6 +40,11 @@ class File
      */
     private $fileNameLocation;
 
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private $fileSize;
+
     public function getId()
     {
         return $this->id;
@@ -89,6 +94,18 @@ class File
     public function setFileNameLocation(string $fileNameLocation): self
     {
         $this->fileNameLocation = $fileNameLocation;
+
+        return $this;
+    }
+
+    public function getFileSize(): ?int
+    {
+        return $this->fileSize;
+    }
+
+    public function setFileSize(int $fileSize): self
+    {
+        $this->fileSize = $fileSize;
 
         return $this;
     }

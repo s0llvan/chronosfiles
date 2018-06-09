@@ -46,3 +46,5 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/profil$, role: ROLE_USER }
+        - { path: ^/download, role: ROLE_USER }
+        - { path: ^/files, role: ROLE_USER }

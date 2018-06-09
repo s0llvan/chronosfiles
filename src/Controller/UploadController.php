@@ -27,6 +27,7 @@ class UploadController extends Controller
 
             $file = $form->get('fileName')->getData();
             $fileOriginalName = $file->getClientOriginalName();
+            $fileSize = $file->getClientSize();
 
             $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
             $tmpFileName = $fileName . '.bak';
@@ -52,6 +53,7 @@ class UploadController extends Controller
             $fileEntity->setFileName($encryptedFileName);
             $fileEntity->setFileNameLocation($fileName);
             $fileEntity->setFileHash($fileHash);
+            $fileEntity->setFileSize($fileSize);
             $fileEntity->setUser($user);
 
             $em = $this->getDoctrine()->getManager();
