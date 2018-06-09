@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ChronosFiles {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="{{ asset('build/css/semantic-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('build/css/app.css') }}">
     {% block stylesheets %}{% endblock %}
 </head>
@@ -54,6 +53,7 @@
     {% block javascripts %}{% endblock %}
 
     <footer>
+        <script src="{{ asset('build/js/semantic-ui.js') }}"></script>
         <script src="{{ asset('build/js/app.js') }}"></script>
     </footer>
 </body>

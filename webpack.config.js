@@ -14,6 +14,9 @@ Encore
     .addEntry('js/app', './assets/js/app.js')
     .addStyleEntry('css/app', './assets/css/app.css')
 
+    .addEntry('js/semantic-ui', './assets/lib/semantic-ui/dist/semantic.min.js')
+    .addStyleEntry('css/semantic-ui', './assets/lib/semantic-ui/dist/semantic.min.css')
+
     // uncomment if you use Sass/SCSS files
     // .enableSassLoader()
 
