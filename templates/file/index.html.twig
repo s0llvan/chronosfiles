@@ -18,13 +18,27 @@
         {% for file in files %}
         <tr>
             <td>{{ file.fileName }}</td>
+
+            {% if file.fileSize < 1024 %}
+            <td>{{ (file.fileSize)|round(2) }} Bytes</td>
+            {% elseif file.fileSize < 1024 * 64 %}
+            <td>{{ (file.fileSize / 1024)|round(2) }} Ko</td>
+            {% else %}
             <td>{{ (file.fileSize / 1024 / 1024)|round(2) }} Mo</td>
+            {% endif %}
+
             <td>{{ file.createdAt|date("d/m/Y") }}</td>
             <td>
-                <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">Download</a>
+                <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">
+                    <i class="download icon"></i>
+                    Download
+                </a>
             </td>
             <td>
-                <a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">Delete</a>
+                <a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">
+                    <i class="trash icon"></i>
+                    Delete
+                </a>
             </td>
         </tr>
         {% endfor %}
