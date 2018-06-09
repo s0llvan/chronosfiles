@@ -6,44 +6,55 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
- */
+* @ORM\Entity(repositoryClass="App\Repository\FileRepository")
+* @ORM\HasLifecycleCallbacks()
+*/
 class File
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    * @ORM\Id()
+    * @ORM\GeneratedValue()
+    * @ORM\Column(type="integer")
+    */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\File(maxSize=8388608)
-     */
+    * @ORM\Column(type="string", length=255)
+    *
+    * @Assert\File(maxSize=8388608)
+    */
     private $fileName;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
+    * @ORM\Column(type="string", length=255)
+    */
     private $fileHash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="files")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="files")
+    * @ORM\JoinColumn(nullable=false)
+    */
     private $user;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
+    * @ORM\Column(type="string", length=255)
+    */
     private $fileNameLocation;
 
     /**
-     * @ORM\Column(type="bigint")
-     */
+    * @ORM\Column(type="bigint")
+    */
     private $fileSize;
+
+    /**
+    * @ORM\Column(type="datetime")
+    */
+    private $createdAt;
+
+    /**
+    * @ORM\Column(type="datetime", nullable=true)
+    */
+    private $updatedAt;
 
     public function getId()
     {
@@ -108,5 +119,45 @@ class File
         $this->fileSize = $fileSize;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+    * @ORM\PrePersist
+    */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+    * @ORM\PreUpdate
+    */
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }

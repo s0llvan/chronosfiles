@@ -8,6 +8,7 @@
         <tr>
             <th>Name</th>
             <th>Size</th>
+            <th>Uploaded</th>
             <th></th>
             <th></th>
         </tr>
@@ -18,6 +19,7 @@
         <tr>
             <td>{{ file.fileName }}</td>
             <td>{{ (file.fileSize / 1024 / 1024)|round(2) }} Mo</td>
+            <td>{{ file.createdAt|date("d/m/Y") }}</td>
             <td>
                 <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">Download</a>
             </td>
