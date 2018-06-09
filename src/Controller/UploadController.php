@@ -19,45 +19,53 @@ class UploadController extends Controller
     public function index(Request $request)
     {
         $user = $this->getUser();
-        $fileEntity = new File();
-        $form = $this->createForm(FileType::class, $fileEntity);
+
+        $form = $this->createForm(FileType::class);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $file = $form->get('fileName')->getData();
-            $fileOriginalName = $file->getClientOriginalName();
-            $fileSize = $file->getClientSize();
-
-            $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-            $tmpFileName = $fileName . '.bak';
-
-            $filePath = $this->getParameter('upload_directory') . $fileName;
-            $tmpFilePath = $filePath . '.bak';
-
-            $file->move(
-                $this->getParameter('upload_directory'),
-                $tmpFileName
-            );
-
-            $fileHash = md5_file($tmpFilePath);
-
-            $user_key_encoded = $this->get('session')->get('encryption_key');
-            $user_key = Key::loadFromAsciiSafeString($user_key_encoded);
-
-            CryptoFile::encryptFile($tmpFilePath, $filePath, $user_key);
-            $encryptedFileName = Crypto::encrypt($fileOriginalName, $user_key);
-
-            unlink($tmpFilePath);
-
-            $fileEntity->setFileName($encryptedFileName);
-            $fileEntity->setFileNameLocation($fileName);
-            $fileEntity->setFileHash($fileHash);
-            $fileEntity->setFileSize($fileSize);
-            $fileEntity->setUser($user);
+            $files = $form->get('fileName')->getData();
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($fileEntity);
+
+            foreach ($files as $file)
+            {
+                $fileEntity = new File();
+
+                $fileOriginalName = $file->getClientOriginalName();
+                $fileSize = $file->getClientSize();
+
+                $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+                $tmpFileName = $fileName . '.bak';
+
+                $filePath = $this->getParameter('upload_directory') . $fileName;
+                $tmpFilePath = $filePath . '.bak';
+
+                $file->move(
+                    $this->getParameter('upload_directory'),
+                    $tmpFileName
+                );
+
+                $fileHash = md5_file($tmpFilePath);
+
+                $user_key_encoded = $this->get('session')->get('encryption_key');
+                $user_key = Key::loadFromAsciiSafeString($user_key_encoded);
+
+                CryptoFile::encryptFile($tmpFilePath, $filePath, $user_key);
+                $encryptedFileName = Crypto::encrypt($fileOriginalName, $user_key);
+
+                unlink($tmpFilePath);
+
+                $fileEntity->setFileName($encryptedFileName);
+                $fileEntity->setFileNameLocation($fileName);
+                $fileEntity->setFileHash($fileHash);
+                $fileEntity->setFileSize($fileSize);
+                $fileEntity->setUser($user);
+
+                $em->persist($fileEntity);
+            }
+
             $em->flush();
         }
 

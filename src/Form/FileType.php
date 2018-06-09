@@ -14,19 +14,14 @@ class FileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fileName', FormFileType::class)
+            ->add('fileName', FormFileType::class, [
+                'multiple' => true
+            ])
             ->add('upload', SubmitType::class, [
                 'attr' => [
                     'class' => 'ui button'
                 ]
             ])
         ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => File::class,
-        ]);
     }
 }
