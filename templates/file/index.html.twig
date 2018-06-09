@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Files{% endblock %}
+
+{% block body %}
+<ul>
+    {% for file in files %}
+    <li>
+        <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}" target="_blank">{{ file.fileName }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

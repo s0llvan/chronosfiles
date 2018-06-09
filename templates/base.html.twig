@@ -10,6 +10,12 @@
         <ul>
             {% if app.user %}
             <li>
+                <a href="{{ path('files') }}">Files</a>
+            </li>
+            <li>
+                <a href="{{ path('upload') }}">Upload</a>
+            </li>
+            <li>
                 <a href="{{ path('logout') }}">Logout</a>
             </li>
             {% else %}

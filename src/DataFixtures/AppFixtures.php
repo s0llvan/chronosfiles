@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Defuse\Crypto\KeyProtectedByPassword;
 
 class AppFixtures extends Fixture
 {
@@ -24,6 +25,13 @@ class AppFixtures extends Fixture
             $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
             $user->setEmail($email);
             $user->setRoles($roles);
+
+            $password = sha1($password);
+
+            $protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($password);
+            $protected_key_encoded = $protected_key->saveToAsciiSafeString();
+
+            $user->setEncryptionKey($protected_key_encoded);
 
             $manager->persist($user);
             $this->addReference($username, $user);
