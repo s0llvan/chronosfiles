@@ -42,9 +42,7 @@ class FileController extends Controller
             $file->setFileNameLocation($fileNameLocation);
         }
 
-        $form = $this->createForm(SearchFileType::class, null, [
-            'action' => $this->generateUrl('files_search')
-        ]);
+        $form = $this->getSearchForm();
 
         return $this->render('file/index.html.twig', [
             'files' => $files,
@@ -75,7 +73,7 @@ class FileController extends Controller
                     $fileName = Crypto::decrypt($fileName, $user_key);
                     $fileNameLocation = Crypto::encrypt($fileNameLocation, $user_key);
                 } catch (Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException $ex) {
-                    
+
                 }
 
                 $file->setFileName($fileName);
@@ -127,9 +125,12 @@ class FileController extends Controller
             $file->setFileNameLocation($fileNameLocation);
         }
 
+        $form = $this->getSearchForm();
+
         return $this->render('file/index.html.twig', [
             'files' => $files,
-            'category' => $category
+            'category' => $category,
+            'form' => $form->createView()
         ]);
     }
 
@@ -202,5 +203,12 @@ class FileController extends Controller
         }
 
         return $this->redirect($this->generateUrl('files'));
+    }
+
+    private function getSearchForm()
+    {
+        return $this->createForm(SearchFileType::class, null, [
+            'action' => $this->generateUrl('files_search')
+        ]);
     }
 }
