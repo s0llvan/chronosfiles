@@ -3,45 +3,70 @@
 {% block title %}Files{% endblock %}
 
 {% block body %}
-<table class="ui basic table stackable striped">
-    <thead class="mobile hidden">
-        <tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Uploaded</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
+<div class="ui menu">
+    <div class="item">
+        <div class="ui icon input">
+            <input placeholder="Search..." type="text">
+            <i class="search icon"></i>
+        </div>
+    </div>
+    <div class="right item">
+        {{ form_start(form) }}
+        <div class="ui action input">
+            {{ form_widget(form.name) }}
+            {{ form_widget(form.save) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
 
-    <tbody>
-        {% for file in files %}
-        <tr>
-            <td>{{ file.fileName }}</td>
+<div class="ui grid">
+    <div class="three wide column">
+        <div class="ui fluid vertical menu">
+            <a class="item" href="{{ path('files') }}">All</a>
+            {% for category in app.user.categories %}
+            <a class="item" href="{{ path('files_category', {'id': category.id}) }}">{{ category.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
 
-            {% if file.fileSize < 1024 %}
-            <td>{{ (file.fileSize)|round(2) }} Bytes</td>
-            {% elseif file.fileSize < 1024 * 64 %}
-            <td>{{ (file.fileSize / 1024)|round(2) }} Ko</td>
-            {% else %}
-            <td>{{ (file.fileSize / 1024 / 1024)|round(2) }} Mo</td>
-            {% endif %}
+    {% if files|length > 0 %}
+    <div class="thirteen wide column">
+        <table class="ui basic table stackable striped">
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.fileName|length > 90 ? file.fileName|slice(0,90) ~ '...' : file.fileName }}</td>
 
-            <td>{{ file.createdAt|date("d/m/Y") }}</td>
-            <td>
-                <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">
-                    <i class="download icon"></i>
-                    Download
-                </a>
-            </td>
-            <td>
-                <a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">
-                    <i class="trash icon"></i>
-                    Delete
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                    {% if file.fileSize < 1024 %}
+                    <td>{{ (file.fileSize)|round(2) }} Bytes</td>
+                    {% elseif file.fileSize < 1024 * 64 %}
+                    <td>{{ (file.fileSize / 1024)|round(2) }} Ko</td>
+                    {% else %}
+                    <td>{{ (file.fileSize / 1024 / 1024)|round(2) }} Mo</td>
+                    {% endif %}
+
+                    <td>{{ file.createdAt|date("d/m/Y") }}</td>
+
+                    <td>
+                        <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">
+                            <i class="download icon"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">
+                            <i class="trash icon"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block javascript %}
+
 {% endblock %}

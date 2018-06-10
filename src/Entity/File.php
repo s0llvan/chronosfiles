@@ -56,6 +56,11 @@ class File
     */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="files")
+     */
+    private $category;
+
     public function getId()
     {
         return $this->id;
@@ -159,5 +164,17 @@ class File
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }

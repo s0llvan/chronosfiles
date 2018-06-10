@@ -10,6 +10,9 @@ use App\Entity\File;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Defuse\Crypto\Crypto;
+use App\Form\CategoryType;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Category;
 
 class FileController extends Controller
 {
@@ -38,8 +41,48 @@ class FileController extends Controller
             $file->setFileNameLocation($fileNameLocation);
         }
 
+        $form = $this->createForm(CategoryType::class, null, [
+            'action' => $this->generateUrl('category', [], true)
+        ]);
+
         return $this->render('file/index.html.twig', [
-            'files' => $files
+            'files' => $files,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+    * @Route("/files/{id}", name="files_category")
+    */
+    public function categories(Request $request, Category $category)
+    {
+        $files = $category->getFiles();
+
+        $user_key_encoded = $this->get('session')->get('encryption_key');
+        $user_key = Key::loadFromAsciiSafeString($user_key_encoded);
+
+        foreach ($files as $file) {
+            $fileName = $file->getFileName();
+            $fileNameLocation = $file->getFileNameLocation();
+
+            try {
+                $fileName = Crypto::decrypt($fileName, $user_key);
+                $fileNameLocation = Crypto::encrypt($fileNameLocation, $user_key);
+            } catch (Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException $ex) {
+
+            }
+
+            $file->setFileName($fileName);
+            $file->setFileNameLocation($fileNameLocation);
+        }
+
+        $form = $this->createForm(CategoryType::class, null, [
+            'action' => $this->generateUrl('category', [], true)
+        ]);
+
+        return $this->render('file/index.html.twig', [
+            'files' => $files,
+            'form' => $form->createView()
         ]);
     }
 

@@ -20,7 +20,9 @@ class UploadController extends Controller
     {
         $user = $this->getUser();
 
-        $form = $this->createForm(FileType::class);
+        $form = $this->createForm(FileType::class, null, [
+            'user' => $user
+        ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -32,6 +34,7 @@ class UploadController extends Controller
             foreach ($files as $file)
             {
                 $fileEntity = new File();
+                $fileEntity->setCategory($form->get('category')->getData());
 
                 $fileOriginalName = $file->getClientOriginalName();
                 $fileSize = $file->getClientSize();

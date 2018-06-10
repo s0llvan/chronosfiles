@@ -51,11 +51,11 @@
     <div class="ui main container">
         {% block body %}{% endblock %}
     </div>
-    {% block javascripts %}{% endblock %}
 
     <footer>
         <script src="{{ asset('build/js/semantic-ui.js') }}"></script>
         <script src="{{ asset('build/js/app.js') }}"></script>
+        {% block javascript %}{% endblock %}
     </footer>
 </body>
 </html>

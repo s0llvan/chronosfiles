@@ -11,8 +11,13 @@
         {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
 
         {{ form_widget(form.fileName) }}
+        {{ form_errors(form.fileName) }}
 
-        {{ form_errors(form) }}
+        <div class="field">
+            <label>Category</label>
+            {{ form_widget(form.category) }}
+        </div>
+        {{ form_errors(form.category) }}
 
         {{ form_end(form) }}
     </div>
