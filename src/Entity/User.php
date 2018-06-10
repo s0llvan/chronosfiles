@@ -11,61 +11,70 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(name="user")
- * @UniqueEntity(fields="email", message="Email déjà pris")
- * @UniqueEntity(fields="username", message="Username déjà pris")
- */
+* @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+* @ORM\Table(name="user")
+* @UniqueEntity(fields="email", message="Email address already used !")
+* @UniqueEntity(fields="username", message="Username already used !")
+*/
 class User implements UserInterface, \Serializable
 {
     /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    * @var int
+    *
+    * @ORM\Id
+    * @ORM\GeneratedValue
+    * @ORM\Column(type="integer")
+    */
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", unique=true)
-     * @Assert\NotBlank()
-     */
+    * @var string
+    *
+    * @ORM\Column(type="string", unique=true)
+    * @Assert\NotBlank()
+    * @Assert\Length(
+    *       min = 3,
+    *       max = 12
+    * )
+    */
     private $username;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     */
+    * @var string
+    *
+    * @ORM\Column(type="string", unique=true)
+    * @Assert\NotBlank()
+    * @Assert\Email()
+    */
     private $email;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=64)
-     */
+    * @var string
+    *
+    * @ORM\Column(type="string", length=64)
+    * @Assert\NotBlank()
+    * @Assert\Length(
+    *       min = 8,
+    *       max = 64
+    * )
+    */
     private $password;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(type="json")
-     */
+    * @var array
+    *
+    * @ORM\Column(type="json")
+    */
     private $roles = [];
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
+    * @ORM\Column(type="string", length=255)
+    */
     private $encryptionKey;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="user", orphanRemoval=true)
-     */
+    * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="user", orphanRemoval=true)
+    */
     private $files;
 
     public function __construct()
@@ -109,8 +118,8 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Retourne les rôles de l'user
-     */
+    * Retourne les rôles de l'user
+    */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -129,10 +138,10 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Retour le salt qui a servi à coder le mot de passe
-     *
-     * {@inheritdoc}
-     */
+    * Retour le salt qui a servi à coder le mot de passe
+    *
+    * {@inheritdoc}
+    */
     public function getSalt(): ?string
     {
         // See "Do you need to use a Salt?" at https://symfony.com/doc/current/cookbook/security/entity_provider.html
@@ -143,10 +152,10 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Removes sensitive data from the user.
-     *
-     * {@inheritdoc}
-     */
+    * Removes sensitive data from the user.
+    *
+    * {@inheritdoc}
+    */
     public function eraseCredentials(): void
     {
         // Nous n'avons pas besoin de cette methode car nous n'utilions pas de plainPassword
@@ -155,16 +164,16 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * {@inheritdoc}
-     */
+    * {@inheritdoc}
+    */
     public function serialize(): string
     {
         return serialize([$this->id, $this->username, $this->password]);
     }
 
     /**
-     * {@inheritdoc}
-     */
+    * {@inheritdoc}
+    */
     public function unserialize($serialized): void
     {
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
@@ -183,8 +192,8 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return Collection|File[]
-     */
+    * @return Collection|File[]
+    */
     public function getFiles(): Collection
     {
         return $this->files;

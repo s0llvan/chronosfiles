@@ -2,13 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>ChronosFiles {% block title %}{% endblock %}</title>
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
+    <title>ChronosFiles - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('build/css/semantic-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('build/css/app.css') }}">
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-    <div class="ui menu">
+    <div class="ui menu stackable">
         <div class="ui container">
             <div class="header item">
                 ChronosFiles
@@ -26,8 +27,8 @@
                 <i class="upload icon"></i>
                 Upload
             </a>
-            <div class="right item">
-                <a href="{{ path('logout') }}">
+            <div class="right menu">
+                <a class="item" href="{{ path('logout') }}">
                     <i class="sign out alternate icon"></i>
                     Logout
                 </a>

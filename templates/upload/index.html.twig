@@ -5,14 +5,14 @@
 {% form_theme form 'form_layout.html.twig' %}
 
 {% block body %}
-<div class="ui grid">
+<div class="ui stackable grid">
     <div class="five wide column"></div>
     <div class="five wide column">
         {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
 
         {{ form_widget(form.fileName) }}
 
-        {{ form_errors(form) }} 
+        {{ form_errors(form) }}
 
         {{ form_end(form) }}
     </div>

@@ -46,6 +46,8 @@ class RegistrationController extends Controller
             $event = new GenericEvent($user);
             $eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
 
+            $this->get('session')->getFlashBag()->add('success', 'Registration completed !');
+
             return $this->redirectToRoute('login');
         }
 

@@ -3,7 +3,7 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-<div class="ui grid">
+<div class="ui grid stackable">
     <div class="five wide column"></div>
     <div class="five wide column">
         <form action="{{ path('login') }}" method="post" class="ui form">
@@ -21,6 +21,10 @@
                 {{ error.messageKey }}
             </div>
             {% endif %}
+
+            {% for flashMessage in app.session.flashbag.get('success') %}
+            <p>{{ flashMessage }}</p>
+            {% endfor %}
             <button type="submit" class="ui button">
                 <i class="fa fa-sign-in" aria-hidden="true"></i> Sign-in
             </button>
