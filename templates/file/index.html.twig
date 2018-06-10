@@ -5,10 +5,12 @@
 {% block body %}
 <div class="ui menu stackable">
     <div class="right item">
+        {{ form_start(form) }}
         <div class="ui icon input">
-            <input placeholder="Search..." type="text">
+            {{ form_widget(form.search) }}
             <i class="search icon"></i>
         </div>
+        {{ form_end(form) }}
     </div>
 </div>
 

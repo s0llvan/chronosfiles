@@ -13,6 +13,7 @@ use Defuse\Crypto\Crypto;
 use App\Form\CategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Category;
+use App\Form\SearchFileType;
 
 class FileController extends Controller
 {
@@ -41,8 +42,59 @@ class FileController extends Controller
             $file->setFileNameLocation($fileNameLocation);
         }
 
+        $form = $this->createForm(SearchFileType::class, null, [
+            'action' => $this->generateUrl('files_search')
+        ]);
+
         return $this->render('file/index.html.twig', [
-            'files' => $files
+            'files' => $files,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+    * @Route("/files/search", name="files_search")
+    */
+    public function search(Request $request)
+    {
+        $files = $this->getUser()->getFiles();
+        $filesResults = [];
+
+        $form = $this->createForm(SearchFileType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            foreach($files as $file) {
+                $user_key_encoded = $this->get('session')->get('encryption_key');
+                $user_key = Key::loadFromAsciiSafeString($user_key_encoded);
+
+                $fileName = $file->getFileName();
+                $fileNameLocation = $file->getFileNameLocation();
+
+                try {
+                    $fileName = Crypto::decrypt($fileName, $user_key);
+                    $fileNameLocation = Crypto::encrypt($fileNameLocation, $user_key);
+                } catch (Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException $ex) {
+                    
+                }
+
+                $file->setFileName($fileName);
+                $file->setFileNameLocation($fileNameLocation);
+
+                $keywords = $form->get('search')->getData();
+
+                $fileName = strtolower($file->getFileName());
+                $keywords = strtolower($keywords);
+
+                if(strpos($fileName, $keywords) !== false) {
+                    $filesResults[] = $file;
+                }
+            }
+        }
+
+        return $this->render('file/index.html.twig', [
+            'files' => $filesResults,
+            'form' => $form->createView()
         ]);
     }
 
