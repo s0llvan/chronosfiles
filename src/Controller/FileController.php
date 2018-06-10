@@ -42,7 +42,7 @@ class FileController extends Controller
         }
 
         $form = $this->createForm(CategoryType::class, null, [
-            'action' => $this->generateUrl('category', [], true)
+            'action' => $this->generateUrl('category_add', [], true)
         ]);
 
         return $this->render('file/index.html.twig', [
@@ -77,12 +77,13 @@ class FileController extends Controller
         }
 
         $form = $this->createForm(CategoryType::class, null, [
-            'action' => $this->generateUrl('category', [], true)
+            'action' => $this->generateUrl('category_add', [], true)
         ]);
 
         return $this->render('file/index.html.twig', [
             'files' => $files,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 

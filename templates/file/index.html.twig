@@ -3,14 +3,14 @@
 {% block title %}Files{% endblock %}
 
 {% block body %}
-<div class="ui menu">
+<div class="ui menu stackable">
     <div class="item">
         <div class="ui icon input">
             <input placeholder="Search..." type="text">
             <i class="search icon"></i>
         </div>
     </div>
-    <div class="right item">
+    <div class="right item mobile hidden">
         {{ form_start(form) }}
         <div class="ui action input">
             {{ form_widget(form.name) }}
@@ -20,7 +20,7 @@
     </div>
 </div>
 
-<div class="ui grid">
+<div class="ui grid stackable">
     <div class="three wide column">
         <div class="ui fluid vertical menu">
             <a class="item" href="{{ path('files') }}">All</a>

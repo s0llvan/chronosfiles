@@ -11,8 +11,8 @@ use App\Entity\Category;
 class CategoryController extends Controller
 {
     /**
-     * @Route("/category", name="category")
-     */
+    * @Route("/category/add", name="category_add")
+    */
     public function index(Request $request)
     {
         $category = new Category();
