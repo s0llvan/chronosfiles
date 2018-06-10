@@ -18,7 +18,7 @@ class CategoryType extends AbstractType
             'attr' => [
                 'class' => 'ui button'
             ],
-            'label' => 'Create'
+            'label' => 'Save'
         ]);
     }
 

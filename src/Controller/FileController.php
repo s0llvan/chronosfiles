@@ -41,13 +41,8 @@ class FileController extends Controller
             $file->setFileNameLocation($fileNameLocation);
         }
 
-        $form = $this->createForm(CategoryType::class, null, [
-            'action' => $this->generateUrl('category_add', [], true)
-        ]);
-
         return $this->render('file/index.html.twig', [
-            'files' => $files,
-            'form' => $form->createView()
+            'files' => $files
         ]);
     }
 
@@ -56,6 +51,10 @@ class FileController extends Controller
     */
     public function categories(Request $request, Category $category)
     {
+        if($category->getUser() != $this->getUser()) {
+            return $this->redirect($this->generateUrl('files'));
+        }
+
         $files = $category->getFiles();
 
         $user_key_encoded = $this->get('session')->get('encryption_key');
@@ -76,13 +75,8 @@ class FileController extends Controller
             $file->setFileNameLocation($fileNameLocation);
         }
 
-        $form = $this->createForm(CategoryType::class, null, [
-            'action' => $this->generateUrl('category_add', [], true)
-        ]);
-
         return $this->render('file/index.html.twig', [
             'files' => $files,
-            'form' => $form->createView(),
             'category' => $category
         ]);
     }

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% form_theme form 'form_layout.html.twig' %}
+
+{% block body %}
+<div class="ui grid stackable">
+    <div class="four wide column">
+        <div class="ui card">
+            <div class="content">
+                {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+
+                {{ form_widget(form.save) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    <div class="twelve wide column">
+        <table class="ui basic table stackable striped">
+            <thead>
+                <tr>
+                    <th colspan="4">
+                        Categories
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for category in app.user.categories %}
+                <tr>
+                    <td class="collapsing">{{ category.name }}</td>
+                    <td>{{ category.files|length }} files</td>
+                    <td class="right aligned">
+                        <a href="{{ path('category_edit', {'id': category.id}) }}">
+                            <i class="pencil icon"></i>
+                        </a>
+                    </td>
+                    <td class="right aligned collapsing">
+                        <a href="{{ path('category_delete', {'id': category.id}) }}">
+                            <i class="trash icon"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

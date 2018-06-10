@@ -4,19 +4,11 @@
 
 {% block body %}
 <div class="ui menu stackable">
-    <div class="item">
+    <div class="right item">
         <div class="ui icon input">
             <input placeholder="Search..." type="text">
             <i class="search icon"></i>
         </div>
-    </div>
-    <div class="right item mobile hidden">
-        {{ form_start(form) }}
-        <div class="ui action input">
-            {{ form_widget(form.name) }}
-            {{ form_widget(form.save) }}
-        </div>
-        {{ form_end(form) }}
     </div>
 </div>
 
@@ -48,12 +40,12 @@
 
                     <td>{{ file.createdAt|date("d/m/Y") }}</td>
 
-                    <td>
+                    <td class="right aligned">
                         <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">
                             <i class="download icon"></i>
                         </a>
                     </td>
-                    <td>
+                    <td class="right aligned">
                         <a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">
                             <i class="trash icon"></i>
                         </a>
