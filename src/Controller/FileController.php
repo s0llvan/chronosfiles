@@ -154,7 +154,7 @@ class FileController extends Controller
             );
         }
 
-        if($file->getUser() == $this->getUser()) {
+        if($file->getUser() != $this->getUser()) {
             return $this->redirect($this->generateUrl('files'));
         }
 
