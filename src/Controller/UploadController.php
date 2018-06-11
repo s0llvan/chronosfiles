@@ -70,6 +70,8 @@ class UploadController extends Controller
             }
 
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Upload completed !');
         }
 
         return $this->render('upload/index.html.twig', [

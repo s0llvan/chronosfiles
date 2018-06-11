@@ -1,6 +1,9 @@
 {% block form_widget_simple %}
 {% set type = type|default('text') %}
-<div class="field">
+
+{% block form_errors %}
+<div class="field {% if errors|length > 0 %} error {% endif %}">
+{% endblock %}
     {% block form_label %}
     {% if not compound %}
     {% set label_attr = label_attr|merge({'for': id}) %}

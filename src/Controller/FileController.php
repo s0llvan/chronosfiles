@@ -154,6 +154,10 @@ class FileController extends Controller
             );
         }
 
+        if($file->getUser() == $this->getUser()) {
+            return $this->redirect($this->generateUrl('files'));
+        }
+
         $fileNameLocation = $file->getFileNameLocation();
         $fileName = $file->getFileName();
         $fileName = Crypto::decrypt($fileName, $user_key);
@@ -190,16 +194,15 @@ class FileController extends Controller
             return $this->redirect($this->generateUrl('files'));
         }
 
-        if($file->getUser() != $this->getUser()) {
-            return $this->redirect($this->generateUrl('files'));
-        }
+        if($file->getUser() == $this->getUser())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($file);
+            $em->flush();
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($file);
-        $em->flush();
-
-        if(file_exists($filePath)) {
-            unlink($filePath);
+            if(file_exists($filePath)) {
+                unlink($filePath);
+            }
         }
 
         return $this->redirect($this->generateUrl('files'));

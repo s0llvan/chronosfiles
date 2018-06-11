@@ -5,18 +5,23 @@
 {% block body %}
 <div class="ui menu stackable">
     <div class="right item">
-        {{ form_start(form) }}
-        <div class="ui icon input">
-            {{ form_widget(form.search) }}
-            <i class="search icon"></i>
-        </div>
-        {{ form_end(form) }}
+
     </div>
 </div>
 
 <div class="ui grid stackable">
-    <div class="three wide column">
+    <div class="four wide column">
         <div class="ui fluid vertical menu">
+            {{ form_start(form) }}
+            <div class="item">
+
+                <div class="ui input icon">
+                    {{ form_widget(form.search) }}
+                    <i class="icon search"></i>
+                </div>
+
+            </div>
+            {{ form_end(form) }}
             <a class="item" href="{{ path('files') }}">All</a>
             {% for category in app.user.categories %}
             <a class="item" href="{{ path('files_category', {'id': category.id}) }}">{{ category.name }}</a>
@@ -25,12 +30,12 @@
     </div>
 
     {% if files|length > 0 %}
-    <div class="thirteen wide column">
+    <div class="twelve wide column">
         <table class="ui basic table stackable striped">
             <tbody>
                 {% for file in files %}
                 <tr>
-                    <td>{{ file.fileName|length > 90 ? file.fileName|slice(0,90) ~ '...' : file.fileName }}</td>
+                    <td>{{ file.fileName|length > 70 ? file.fileName|slice(0,70) ~ '...' : file.fileName }}</td>
 
                     {% if file.fileSize < 1024 %}
                     <td>{{ (file.fileSize)|round(2) }} Bytes</td>

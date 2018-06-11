@@ -17,14 +17,21 @@
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
             {% if error %}
-            <div class="alert alert-danger">
-                {{ error.messageKey }}
+            <div class="ui form error field">
+                <div class="ui error message">
+                    <p>{{ error.messageKey }}</p>
+                </div>
             </div>
             {% endif %}
 
             {% for flashMessage in app.session.flashbag.get('success') %}
-            <p>{{ flashMessage }}</p>
+            <div class="ui form success field">
+                <div class="ui success message">
+                    <p>{{ flashMessage }}</p>
+                </div>
+            </div>
             {% endfor %}
+
             <button type="submit" class="ui button">
                 <i class="fa fa-sign-in" aria-hidden="true"></i> Sign-in
             </button>
