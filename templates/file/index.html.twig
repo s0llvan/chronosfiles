@@ -16,10 +16,11 @@
 
             </div>
             {{ form_end(form) }}
-            <a class="item {% if route == 'files' %} active {% endif %}" href="{{ path('files') }}">All</a>
+            <a class="item header {% if route == 'files' %} active {% endif %}" href="{{ path('files') }}">All</a>
             {% for category in app.user.categories %}
             <a class="item {% if route == 'files_category' %} active {% endif %}" href="{{ path('files_category', {'id': category.id}) }}">{{ category.name }}</a>
             {% endfor %}
+            <a class="item header {% if route == 'files_uncategorized' %} active {% endif %}" href="{{ path('files_uncategorized') }}">Uncategorized</a>
         </div>
     </div>
 

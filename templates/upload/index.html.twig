@@ -17,7 +17,22 @@
             <label>Category</label>
             {{ form_widget(form.category) }}
         </div>
-        {{ form_errors(form.category) }}
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="ui form success field">
+            <div class="ui success message">
+                <p>{{ flashMessage }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="ui form error field">
+            <div class="ui error message">
+                <p>{{ flashMessage }}</p>
+            </div>
+        </div>
+        {% endfor %}
 
         {{ form_end(form) }}
     </div>
