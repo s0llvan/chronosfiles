@@ -31,10 +31,12 @@ class User implements UserInterface, \Serializable
     * @var string
     *
     * @ORM\Column(type="string", unique=true)
-    * @Assert\NotBlank()
+    * @Assert\NotBlank(message="Username is not required")
     * @Assert\Length(
     *       min = 3,
-    *       max = 12
+    *       minMessage = "Username is too short. It should have {{ limit }} characters or more.",
+    *       max = 12,
+    *       maxMessage = "Username is too long. It should have {{ limit }} characters or less."
     * )
     */
     private $username;
@@ -43,8 +45,14 @@ class User implements UserInterface, \Serializable
     * @var string
     *
     * @ORM\Column(type="string", unique=true)
-    * @Assert\NotBlank()
-    * @Assert\Email()
+    * @Assert\NotBlank(message="Email is required.")
+    * @Assert\Email(message="Email is not valid.")
+    * @Assert\Length(
+    *       min = 8,
+    *       minMessage = "Email is too short. It should have {{ limit }} characters or more.",
+    *       max = 64,
+    *       maxMessage = "Email is too long. It should have {{ limit }} characters or less."
+    * )
     */
     private $email;
 
@@ -52,10 +60,12 @@ class User implements UserInterface, \Serializable
     * @var string
     *
     * @ORM\Column(type="string", length=64)
-    * @Assert\NotBlank()
+    * @Assert\NotBlank(message="Password is required.")
     * @Assert\Length(
     *       min = 8,
-    *       max = 64
+    *       minMessage = "Password is too short. It should have {{ limit }} characters or more.",
+    *       max = 64,
+    *       maxMessage = "Password is too long. It should have {{ limit }} characters or less."
     * )
     */
     private $password;
