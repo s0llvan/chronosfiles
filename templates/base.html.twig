@@ -11,36 +11,82 @@
 <body>
     {% set route = app.request.attributes.get('_route') %}
 
-    <div class="ui menu stackable">
-        <div class="ui container">
-            <div class="header item">
-                ChronosFiles
+    <div class="ui page grid">
+        <div class="ui menu main mobile hidden">
+            <div class="ui container">
+                <div class="header item">
+                    ChronosFiles
+                </div>
+                <a class="item {% if route == 'index' %} active {% endif %}" href="{{ path('index') }}">
+                    <i class="home icon"></i>
+                    Home
+                </a>
+                {% if app.user %}
+                <a class="item {% if route starts with 'files' %} active {% endif %}" href="{{ path('files') }}">
+                    <i class="file icon"></i>
+                    Files
+                </a>
+                <a class="item {% if route starts with 'categories' or route starts with 'category' %} active {% endif %}" href="{{ path('categories') }}">
+                    <i class="folder icon"></i>
+                    Categories
+                </a>
+                <a class="item {% if route == 'upload' %} active {% endif %}" href="{{ path('upload') }}">
+                    <i class="upload icon"></i>
+                    Upload
+                </a>
+                <div class="right menu">
+                    <a class="item" href="{{ path('logout') }}">
+                        <i class="sign out alternate icon"></i>
+                        Logout
+                    </a>
+                </div>
+                {% else %}
+                <div class="right menu">
+                    <a class="item {% if route == 'register' %} active {% endif %}" href="{{ path('register') }}">
+                        <i class="user plus icon"></i>
+                        Register
+                    </a>
+                    <a class="item {% if route == 'login' %} active {% endif %}" href="{{ path('login') }}">
+                        <i class="sign in alternate icon"></i>
+                        Login
+                    </a>
+                </div>
+                {% endif %}
             </div>
-            <a class="item {% if route == 'index' %} active {% endif %}" href="{{ path('index') }}">
-                <i class="home icon"></i>
-                Home
-            </a>
-            {% if app.user %}
-            <a class="item {% if route starts with 'files' %} active {% endif %}" href="{{ path('files') }}">
-                <i class="file icon"></i>
-                Files
-            </a>
-            <a class="item {% if route starts with 'categories' or route starts with 'category' %} active {% endif %}" href="{{ path('categories') }}">
-                <i class="folder icon"></i>
-                Categories
-            </a>
-            <a class="item {% if route == 'upload' %} active {% endif %}" href="{{ path('upload') }}">
-                <i class="upload icon"></i>
-                Upload
-            </a>
-            <div class="right menu">
+        </div>
+
+        <div class="mobile only main narrow row">
+            <div class="ui navbar menu">
+                <a href="" class="header brand item">ChronosFiles</a>
+                <div class="right menu open">
+                    <a href="#" class="menu item">
+                        <i class="bars icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ui vertical navbar menu" style="display: none;">
+                <a class="item {% if route == 'index' %} active {% endif %}" href="{{ path('index') }}">
+                    <i class="home icon"></i>
+                    Home
+                </a>
+                {% if app.user %}
+                <a class="item {% if route starts with 'files' %} active {% endif %}" href="{{ path('files') }}">
+                    <i class="file icon"></i>
+                    Files
+                </a>
+                <a class="item {% if route starts with 'categories' or route starts with 'category' %} active {% endif %}" href="{{ path('categories') }}">
+                    <i class="folder icon"></i>
+                    Categories
+                </a>
+                <a class="item {% if route == 'upload' %} active {% endif %}" href="{{ path('upload') }}">
+                    <i class="upload icon"></i>
+                    Upload
+                </a>
                 <a class="item" href="{{ path('logout') }}">
                     <i class="sign out alternate icon"></i>
                     Logout
                 </a>
-            </div>
-            {% else %}
-            <div class="right menu">
+                {% else %}
                 <a class="item {% if route == 'register' %} active {% endif %}" href="{{ path('register') }}">
                     <i class="user plus icon"></i>
                     Register
@@ -49,13 +95,13 @@
                     <i class="sign in alternate icon"></i>
                     Login
                 </a>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-    </div>
 
-    <div class="ui main container">
-        {% block body %}{% endblock %}
+        <div class="ui main container">
+            {% block body %}{% endblock %}
+        </div>
     </div>
 
     <footer>

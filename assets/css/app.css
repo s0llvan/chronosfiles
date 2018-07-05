@@ -7,4 +7,30 @@
     [class*="or lower hidden"] {
         display: none !important;
     }
+
+    .vertical.menu < .stackable {
+        width: 100%;
+    }
+}
+
+.ui.vertical.menu.navbar{
+	margin-top: -15px !important;
+	width: 100%;
+	display: none;
+    margin-bottom: 20px;
+}
+
+.ui.menu {
+    width: 100%;
+}
+
+.mobile.narrow.main {
+    padding: 0;
+}
+
+
+
+.ui.page.grid {
+    margin-top: 0;
+    padding: 0;
 }
