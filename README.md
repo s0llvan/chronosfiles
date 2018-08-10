@@ -62,18 +62,18 @@ Generate database
 php bin/console doctrine:schema:update --force
 ```
 
-Generate fake data
+Generate fake data (optionnal)
 ```
 php bin/console doctrine:fixtures:load
 ```
 
-Run webpack
+Run webpack for css/js compilation in a terminal
 
 ```
 ./node_modules/.bin/encore dev --watch
 ```
 
-Run server
+Run server in another terminal
 
 ```
 php bin/console server:run
@@ -81,8 +81,8 @@ php bin/console server:run
 
 ## Built With
 
-* [Symfony](https://symfony.com/doc/) - The web framework used
-
+* [Symfony](https://symfony.com/doc/) - The web php framework used
+* [SemanticUI](https://semantic-ui.com/) - The web css/js framework used
 
 ## Versioning
 
