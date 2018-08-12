@@ -16,6 +16,8 @@
 
         {{ form_widget(form.password) }}
 
+        {{ form_widget(form.captcha) }}
+
         {% set errors = [] %}
         {% for child in form.children %}
         {% if child.vars.errors is defined %}
