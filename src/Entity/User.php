@@ -268,4 +268,14 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @return Collection|File[]
+     */
+    public function getUncategorizedFiles(): Collection
+    {
+        return $this->files->filter(function($file) {
+            return !$file->getCategory();
+        });
+    }
 }

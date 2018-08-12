@@ -213,10 +213,7 @@ class FileController extends Controller
     */
     public function uncategorized(Request $request)
     {
-        $files = $this->getUser()->getFiles();
-        $files = $files->filter(function($file) {
-            return !$file->getCategory();
-        });
+        $files = $this->getUser()->getUncategorizedFiles();
 
         $user_key_encoded = $this->get('session')->get('encryption_key');
         $user_key = Key::loadFromAsciiSafeString($user_key_encoded);

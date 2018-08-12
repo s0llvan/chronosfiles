@@ -16,14 +16,23 @@
 
             </div>
             {{ form_end(form) }}
-            <a class="item header {% if route == 'files' %} active {% endif %}" href="{{ path('files') }}">All</a>
+            <a class="item header {% if route == 'files' %} active {% endif %}" href="{{ path('files') }}">
+                All
+                <div class="ui label">{{ app.user.files|length }}</div>
+            </a>
             {% for category in app.user.categories %}
-            <a class="item {% if route == 'files_category' %} active {% endif %}" href="{{ path('files_category', {'id': category.id}) }}">{{ category.name }}</a>
+            <a class="item {% if route == 'files_category' %} active {% endif %}" href="{{ path('files_category', {'id': category.id}) }}">
+                {{ category.name }}
+                <div class="ui label">{{ category.files|length }}</div>
+            </a>
             {% endfor %}
-            <a class="item header {% if route == 'files_uncategorized' %} active {% endif %}" href="{{ path('files_uncategorized') }}">Uncategorized</a>
+            <a class="item header {% if route == 'files_uncategorized' %} active {% endif %}" href="{{ path('files_uncategorized') }}">
+                Uncategorized
+                <div class="ui label">{{ app.user.getUncategorizedFiles|length }}</div>
+            </a>
         </div>
     </div>
-
+    
     {% if files|length > 0 %}
     <div class="twelve wide column">
         <table class="ui basic table stackable striped">
@@ -57,8 +66,8 @@
             </tbody>
         </table>
     </div>
+    {% endif %}
 </div>
-{% endif %}
 {% endblock %}
 
 {% block javascript %}
