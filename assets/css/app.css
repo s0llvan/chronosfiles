@@ -28,9 +28,15 @@
     padding: 0;
 }
 
-
-
 .ui.page.grid {
     margin-top: 0;
     padding: 0;
+}
+
+.ui.main.container {
+    padding-top: 20px;
+}
+
+.ui.grid.stackable > .six.wide.column {
+    text-align: center;
 }
