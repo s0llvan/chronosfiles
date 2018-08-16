@@ -47,12 +47,6 @@ class User implements UserInterface, \Serializable
     * @ORM\Column(type="string", unique=true)
     * @Assert\NotBlank(message="Email is required.")
     * @Assert\Email(message="Email is not valid.")
-    * @Assert\Length(
-    *       min = 8,
-    *       minMessage = "Email is too short. It should have {{ limit }} characters or more.",
-    *       max = 64,
-    *       maxMessage = "Email is too long. It should have {{ limit }} characters or less."
-    * )
     */
     private $email;
 

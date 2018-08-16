@@ -16,7 +16,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 Install dependencies
 ```
-apt install -y apt-transport-https lsb-release ca-certificates git wget zip curl
+apt install -y apt-transport-https lsb-release ca-certificates git wget zip curl gnupg
 ```
 
 Add PHP GPG keys
@@ -41,7 +41,7 @@ curl -sL https://deb.nodesource.com/setup_9.x | bash -
 
 Install NodeJS
 ```
-apt-get install -y nodejs
+apt install -y nodejs
 ```
 
 ### Installing
@@ -57,14 +57,16 @@ Install project dependencies
 cd ChronosFiles && composer install && npm install
 ```
 
-Generate database
+Configure database with edit your **.env** file
+
+Create database with tables
 ```
 php bin/console doctrine:schema:update --force
 ```
 
 Generate fake data (optionnal)
 ```
-php bin/console doctrine:fixtures:load
+php bin/console doctrine:fixtures:load -n
 ```
 
 Run webpack for css/js compilation in a terminal

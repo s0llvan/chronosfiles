@@ -22,6 +22,10 @@
                     Home
                 </a>
                 {% if app.user %}
+                <a class="item {% if route == 'profil' %} active {% endif %}" href="{{ path('profil') }}">
+                    <i class="user icon"></i>
+                    Profil
+                </a>
                 <a class="item {% if route starts with 'files' %} active {% endif %}" href="{{ path('files') }}">
                     <i class="file icon"></i>
                     Files
