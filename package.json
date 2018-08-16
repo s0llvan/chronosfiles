@@ -11,6 +11,7 @@
         "build": "encore production"
     },
     "dependencies": {
+        "jquery": "^3.3.1",
         "semantic-ui-css": "^2.3.3"
     }
 }

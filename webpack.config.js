@@ -17,6 +17,8 @@ Encore
     .addEntry('js/semantic-ui', './node_modules/semantic-ui-css/semantic.min.js')
     .addStyleEntry('css/semantic-ui', './node_modules/semantic-ui-css/semantic.min.css')
 
+    .addEntry('js/jquery', './node_modules/jquery/dist/jquery.min.js')
+
     // uncomment if you use Sass/SCSS files
     // .enableSassLoader()
 
