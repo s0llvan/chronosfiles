@@ -1,85 +1,18 @@
 # ChronosFiles
 
-Encrypted files hosting
+ChronosFiles is a web application hosting encrypted files
 
-## Getting Started
+[![Github All Releases](https://img.shields.io/github/downloads/s0llvan/ChronosFiles/total.svg)](https://github.com/s0llvan/ChronosFiles)
+[![GitHub issues](https://img.shields.io/github/issues/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/issues)
+[![GitHub forks](https://img.shields.io/github/forks/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/network)
+[![GitHub stars](https://img.shields.io/github/stars/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/stargazers)
+[![GitHub license](https://img.shields.io/github/license/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/blob/master/LICENSE.md)
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+## Documentation
 
-### Prerequisites
-
-- PHP >= 7.2
-- Composer >= 1.2.2
-- NodeJS >= 9
-
-#### Debian 9
-
-Install dependencies
-```
-apt install -y apt-transport-https lsb-release ca-certificates git wget zip curl gnupg
-```
-
-Add PHP GPG keys
-```
-wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-```
-
-Add PHP repository
-```
-echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-```
-
-Install PHP & Composer
-```
-apt update && apt install -y composer php7.2 php7.2-cli php7.2-sqlite3 php7.2-common php7.2-curl php7.2-gd php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-xml
-```
-
-Add NodeJS repository
-```
-curl -sL https://deb.nodesource.com/setup_9.x | bash -
-```
-
-Install NodeJS
-```
-apt install -y nodejs
-```
-
-### Installing
-
-Clone the project repository
-```
-git clone https://github.com/s0llvan/ChronosFiles/
-```
-
-Install project dependencies
-
-```
-cd ChronosFiles && composer install && npm install
-```
-
-Configure database with edit your **.env** file
-
-Create database with tables
-```
-php bin/console doctrine:schema:update --force
-```
-
-Generate fake data (optionnal)
-```
-php bin/console doctrine:fixtures:load -n
-```
-
-Run webpack for css/js compilation in a terminal
-
-```
-./node_modules/.bin/encore dev --watch
-```
-
-Run server in another terminal
-
-```
-php bin/console server:run
-```
+* [Setting-up-environment](https://github.com/s0llvan/ChronosFiles/wiki/Setting-up-environment)
+* [Development-environment](https://github.com/s0llvan/ChronosFiles/wiki/Development-environment)
+* [Production-environment](https://github.com/s0llvan/ChronosFiles/wiki/Production-environment)
 
 ## Built With
 
