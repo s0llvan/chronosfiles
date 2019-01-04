@@ -8,6 +8,14 @@ ChronosFiles is a web application hosting encrypted files
 [![GitHub stars](https://img.shields.io/github/stars/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/stargazers)
 [![GitHub license](https://img.shields.io/github/license/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/blob/master/LICENSE.md)
 
+## Preview
+
+**Home page**
+![Home page](https://screenshotscdn.firefoxusercontent.com/images/9eb4a1c4-20b8-4a69-b41e-c70e97397073.png)
+
+**Files page**
+![Files pages](https://screenshotscdn.firefoxusercontent.com/images/4d78c148-a799-4faf-8849-2141bd72cfac.png)
+
 ## Documentation
 
 * [Setting-up-environment](https://github.com/s0llvan/ChronosFiles/wiki/Setting-up-environment)
