@@ -37,6 +37,14 @@
         </div>
         {% endif %}
 
+        {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="ui form success field">
+            <div class="ui success message">
+                <p>{{ flashMessage }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
         {{ form_end(form) }}
     </div>
 </div>

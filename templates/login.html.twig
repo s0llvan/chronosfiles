@@ -16,6 +16,7 @@
                 <input type="password" id="password" name="_password" />
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+
             {% if error %}
             <div class="ui form error field">
                 <div class="ui error message">
@@ -27,6 +28,14 @@
             {% for flashMessage in app.session.flashbag.get('success') %}
             <div class="ui form success field">
                 <div class="ui success message">
+                    <p>{{ flashMessage }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+             {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="ui form error field">
+                <div class="ui error message">
                     <p>{{ flashMessage }}</p>
                 </div>
             </div>
