@@ -40,8 +40,30 @@
             </div>
         </div>
         {% endfor %}
-
+        <a class="ui button ui right floated delete-profil" data-url="{{ path('profil_delete') }}">Delete</a>
         {{ form_end(form) }}
     </div>
 </div>
+
+<div class="ui modal mini">
+    <div class="header">
+      Delete Your Account
+    </div>
+    <div class="content">
+      <p>Are you sure you want to delete your account</p>
+    </div>
+    <div class="actions">
+      <div class="ui negative button">
+        No
+      </div>
+      <div class="ui positive right labeled icon button">
+        Yes
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{{ encore_entry_script_tags('profil') }}
 {% endblock %}

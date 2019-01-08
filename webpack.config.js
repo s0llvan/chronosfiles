@@ -13,6 +13,8 @@ Encore
     // uncomment to define the assets of the project
     .addEntry('app', './assets/js/app.js')
 
+    .addEntry('profil', './assets/js/profil.js')
+
     // uncomment if you use Sass/SCSS files
     .enableSassLoader()
 

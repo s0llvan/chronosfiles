@@ -19,34 +19,33 @@ class ProfilType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('username', TextType::class, [
-            'disabled' => true,
-            'constraints' => [
-                new Length([
-                    'min' => 3,
-                    'minMessage' => 'Password is too short. It should have {{ limit }} characters or more.',
-                    'max' => 12,
-                    'maxMessage' => 'Password is too long. It should have {{ limit }} characters or less.'
-                ])
-            ]
-        ])
-        ->add('email', EmailType::class, [
-            'required' => false,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Email is required'
-                ]),
-                new Email([
-                    'message' => 'Email is not valid'
-                ])
-            ]
-        ])
-        ->add('save', SubmitType::class, [
-            'attr' => [
-                'class' => 'ui button'
-            ]
-        ])
-        ;
+            ->add('username', TextType::class, [
+                'disabled' => true,
+                'constraints' => [
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'Password is too short. It should have {{ limit }} characters or more.',
+                        'max' => 12,
+                        'maxMessage' => 'Password is too long. It should have {{ limit }} characters or less.'
+                    ])
+                ]
+            ])
+            ->add('email', EmailType::class, [
+                'required' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Email is required'
+                    ]),
+                    new Email([
+                        'message' => 'Email is not valid'
+                    ])
+                ]
+            ])
+            ->add('save', SubmitType::class, [
+                'attr' => [
+                    'class' => 'ui button primary'
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
