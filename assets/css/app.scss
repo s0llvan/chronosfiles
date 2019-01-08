@@ -1,4 +1,7 @@
+@import "~semantic-ui-css/semantic.min.css";
+
 @media only screen and (max-width: 767px) {
+
     [class*="mobile hidden"],
     [class*="tablet only"]:not(.mobile),
     [class*="computer only"]:not(.mobile),
@@ -8,15 +11,15 @@
         display: none !important;
     }
 
-    .vertical.menu < .stackable {
+    .vertical.menu>.stackable {
         width: 100%;
     }
 }
 
-.ui.vertical.menu.navbar{
-	margin-top: -15px !important;
-	width: 100%;
-	display: none;
+.ui.vertical.menu.navbar {
+    margin-top: -15px !important;
+    width: 100%;
+    display: none;
     margin-bottom: 20px;
 }
 
@@ -37,6 +40,6 @@
     padding-top: 20px;
 }
 
-.ui.grid.stackable > .six.wide.column {
+.ui.grid.stackable>.six.wide.column {
     text-align: center;
 }

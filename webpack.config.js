@@ -11,19 +11,14 @@ Encore
     // .enableVersioning(Encore.isProduction())
 
     // uncomment to define the assets of the project
-    .addEntry('js/app', './assets/js/app.js')
-    .addStyleEntry('css/app', './assets/css/app.css')
-
-    .addEntry('js/semantic-ui', './node_modules/semantic-ui-css/semantic.min.js')
-    .addStyleEntry('css/semantic-ui', './node_modules/semantic-ui-css/semantic.min.css')
-
-    .addEntry('js/jquery', './node_modules/jquery/dist/jquery.min.js')
+    .addEntry('app', './assets/js/app.js')
 
     // uncomment if you use Sass/SCSS files
-    // .enableSassLoader()
+    .enableSassLoader()
 
     // uncomment for legacy applications that require $/jQuery as a global variable
-    // .autoProvidejQuery()
-;
+    .autoProvidejQuery()
+
+    .enableSingleRuntimeChunk()
 
 module.exports = Encore.getWebpackConfig();
