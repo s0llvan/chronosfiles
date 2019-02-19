@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Password reset{% endblock %}
+
+{% form_theme form 'form_layout.html.twig' %}
+
+{% block body %}
+<div class="ui grid stackable">
+    <div class="five wide column"></div>
+    <div class="five wide column">
+        {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+
+        {{ form_widget(form.username) }}
+
+        {{ form_widget(form.email) }}
+
+        {{ form_widget(form.captcha) }}
+
+        {% set errors = [] %}
+        {% for child in form.children %}
+        {% if child.vars.errors is defined %}
+        {% for error in child.vars.errors %}
+        {% set errors = errors|merge([error.message]) %}
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+
+        {% if errors|length > 0 %}
+        <div class="ui form error field">
+            <div class="ui error message">
+                    {% for error in errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="ui form error field">
+            <div class="ui error message">
+                <p>{{ flashMessage }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="ui form success field">
+            <div class="ui success message">
+                <p>{{ flashMessage }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

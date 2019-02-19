@@ -96,6 +96,11 @@ class User implements UserInterface, \Serializable
      */
     private $email_confirmation_token;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $password_reset_token;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -303,6 +308,18 @@ class User implements UserInterface, \Serializable
     public function setEmailConfirmationToken(? string $email_confirmation_token) : self
     {
         $this->email_confirmation_token = $email_confirmation_token;
+
+        return $this;
+    }
+
+    public function getPasswordResetToken(): ?string
+    {
+        return $this->password_reset_token;
+    }
+
+    public function setPasswordResetToken(?string $password_reset_token): self
+    {
+        $this->password_reset_token = $password_reset_token;
 
         return $this;
     }
