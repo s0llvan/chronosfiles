@@ -50,16 +50,20 @@ class ProfilController extends Controller
 	 */
 	public function deleteProfil()
 	{
+		$em = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
 
-		$user_key_encoded = $this->get('session')->get('encryption_key');
-		$user_key = Key::loadFromAsciiSafeString($user_key_encoded);
-
 		foreach ($user->getFiles() as $file) {
+
+			$filePath = $this->getParameter('upload_directory') . $file->getFileNameLocation();
+
+			if (file_exists($filePath)) {
+				unlink($filePath);
+			}
+
 			$em->remove($file);
 		}
 
-		$em = $this->getDoctrine()->getManager();
 		$em->remove($user);
 		$em->flush();
 

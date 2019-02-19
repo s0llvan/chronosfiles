@@ -25,6 +25,7 @@ class AppFixtures extends Fixture
             $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
             $user->setEmail($email);
             $user->setRoles($roles);
+            $user->setEmailConfirmed(true);
 
             $password = sha1($password);
 
@@ -40,7 +41,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function getUserData(): array
+    private function getUserData() : array
     {
         return [
             // $userData = [$username, $password, $email, $roles];
