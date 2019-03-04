@@ -11,10 +11,10 @@ ChronosFiles is a web application hosting encrypted files
 ## Preview
 
 **Home page**
-![Home page](https://screenshotscdn.firefoxusercontent.com/images/9eb4a1c4-20b8-4a69-b41e-c70e97397073.png)
+![Home page](https://i.ibb.co/B2081BG/Screenshot-2019-3-4-Chronos-Files-Index.png)
 
 **Files page**
-![Files pages](https://screenshotscdn.firefoxusercontent.com/images/4d78c148-a799-4faf-8849-2141bd72cfac.png)
+![Files pages](https://i.ibb.co/fx4H9T2/Screenshot-2019-3-4-Chronos-Files-Files.png)
 
 ## Documentation
 
