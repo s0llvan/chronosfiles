@@ -106,6 +106,16 @@ class User implements UserInterface, \Serializable
      */
     private $password_reset_token_last;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $emailConfirmation;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $emailConfirmationLast;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -337,6 +347,30 @@ class User implements UserInterface, \Serializable
     public function setPasswordResetTokenLast(?\DateTimeInterface $password_reset_token_last): self
     {
         $this->password_reset_token_last = $password_reset_token_last;
+
+        return $this;
+    }
+
+    public function getEmailConfirmation(): ?string
+    {
+        return $this->emailConfirmation;
+    }
+
+    public function setEmailConfirmation(?string $emailConfirmation): self
+    {
+        $this->emailConfirmation = $emailConfirmation;
+
+        return $this;
+    }
+
+    public function getEmailConfirmationLast(): ?\DateTimeInterface
+    {
+        return $this->emailConfirmationLast;
+    }
+
+    public function setEmailConfirmationLast(?\DateTimeInterface $emailConfirmationLast): self
+    {
+        $this->emailConfirmationLast = $emailConfirmationLast;
 
         return $this;
     }

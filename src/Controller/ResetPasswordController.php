@@ -19,7 +19,7 @@ class ResetPasswordController extends AbstractController
      */
     public function index(Request $request, UserRepository $userRepository, \Swift_Mailer $mailer)
     {
-        $session = $this->get('session');
+        $session = $request->getSession();
         $form = $this->createForm(ResetPasswordType::class);
         $form->handleRequest($request);
 

@@ -1,68 +1,78 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Profil{% endblock %}
-
 {% form_theme form 'form_layout.html.twig' %}
-
 {% block body %}
-<div class="ui stackable grid">
-    <div class="five wide column"></div>
-    <div class="five wide column">
-        {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
-
-        {{ form_widget(form.username) }}
-
-        {{ form_widget(form.email) }}
-
-        {% set errors = [] %}
-        {% for child in form.children %}
-        {% if child.vars.errors is defined %}
-        {% for error in child.vars.errors %}
-        {% set errors = errors|merge([error.message]) %}
-        {% endfor %}
-        {% endif %}
-        {% endfor %}
-
-        {% if errors|length > 0 %}
-        <div class="ui form error field">
-            <div class="ui error message">
-                {% for error in errors %}
-                <p>{{ error }}</p>
-                {% endfor %}
+    <div class="ui stackable grid">
+        <div class="five wide column"></div>
+        <div class="five wide column">
+            {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+            {{ form_widget(form.username) }}
+            {{ form_widget(form.email) }}
+            {% set errors = [] %}
+            {% for child in form.children %}
+                {% if child.vars.errors is defined %}
+                    {% for error in child.vars.errors %}
+                        {% set errors = errors|merge([error.message]) %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            {% if errors|length > 0 %}
+                <div class="ui form error field">
+                    <div class="ui error message">
+                        {% for error in errors %}
+                            <p>
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% for flashMessage in app.session.flashbag.get('success') %}
+                <div class="ui form success field">
+                    <div class="ui success message">
+                        <p>
+                            {% autoescape false %}
+                                {{ flashMessage }}
+                            {% endautoescape %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="ui form error field">
+                    <div class="ui error message">
+                        <p>
+                            {% autoescape false %}
+                                {{ flashMessage }}
+                            {% endautoescape %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+            <a class="ui button ui right floated delete-profil" data-url="{{ path('profil_delete') }}">Delete</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <div class="ui basic modal">
+        <div class="ui icon header">
+            <i class="warning icon"></i>
+            Warning
+        </div>
+        <div class="content">
+            <p>Are you sure you want to delete your account and all your files ?</p>
+        </div>
+        <div class="actions">
+            <div class="ui red basic cancel inverted button">
+                <i class="remove icon"></i>
+                No
+            </div>
+            <div class="ui green ok inverted button">
+                <i class="checkmark icon"></i>
+                Yes
             </div>
         </div>
-        {% endif %}
-
-        {% for flashMessage in app.session.flashbag.get('success') %}
-        <div class="ui form success field">
-            <div class="ui success message">
-                <p>{{ flashMessage }}</p>
-            </div>
-        </div>
-        {% endfor %}
-        <a class="ui button ui right floated delete-profil" data-url="{{ path('profil_delete') }}">Delete</a>
-        {{ form_end(form) }}
     </div>
-</div>
-
-<div class="ui basic modal">
-    <div class="ui icon header">
-        <i class="warning icon"></i> Warning
-    </div>
-    <div class="content">
-        <p>Are you sure you want to delete your account and all your files ?</p>
-    </div>
-    <div class="actions">
-        <div class="ui red basic cancel inverted button">
-            <i class="remove icon"></i> No
-        </div>
-        <div class="ui green ok inverted button">
-            <i class="checkmark icon"></i> Yes
-        </div>
-    </div>
-</div>
 {% endblock %}
-
 {% block javascript %}
-{{ encore_entry_script_tags('profil') }}
+    {{ encore_entry_script_tags('profil') }}
 {% endblock %}
