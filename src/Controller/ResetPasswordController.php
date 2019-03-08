@@ -32,30 +32,46 @@ class ResetPasswordController extends AbstractController
 
             if ($user) {
 
-                $token = bin2hex(random_bytes(32));
-                $user->setPasswordResetToken($token);
+                $dateNow = new \DateTime();
+                $dateDiff = $dateNow->getTimestamp();
 
-                $em = $this->getDoctrine()->getManager();
-                $em->flush();
+                if ($user->getPasswordResetTokenLast()) {
+                    $dateDiff = $dateNow->getTimestamp() - $user->getPasswordResetTokenLast()->getTimestamp();
 
-                $confirmation_link = $this->generateUrl('reset_password_confirmation', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+                    // Hours
+                    $dateDiff = $dateDiff / 60 / 60;
+                }
 
-                $message = (new \Swift_Message('ChronosFiles - Reset password'))
-                    ->setFrom('donotreply@chronosfiles.fr')
-                    ->setTo($user->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'emails/reset_password.html.twig',
-                            [
-                                'user' => $user,
-                                'confirmation_link' => $confirmation_link
-                            ]
-                        ),
-                        'text/html'
-                    );
-                $mailer->send($message);
+                if ($dateDiff > 24) {
 
-                $session->getFlashBag()->add('success', 'Please click on the link sent by email to reset your password');
+                    $token = bin2hex(random_bytes(32));
+                    $user->setPasswordResetToken($token);
+                    $user->setPasswordResetTokenLast($dateNow);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->flush();
+
+                    $confirmation_link = $this->generateUrl('reset_password_confirmation', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                    $message = (new \Swift_Message('ChronosFiles - Reset password'))
+                        ->setFrom('donotreply@chronosfiles.fr')
+                        ->setTo($user->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'emails/reset_password.html.twig',
+                                [
+                                    'user' => $user,
+                                    'confirmation_link' => $confirmation_link
+                                ]
+                            ),
+                            'text/html'
+                        );
+                    $mailer->send($message);
+
+                    $session->getFlashBag()->add('success', 'Please click on the link sent by email to reset your password');
+                } else {
+                    $session->getFlashBag()->add('error', 'You have already reset your password, please wait 24 hours');
+                }
             } else {
                 $session->getFlashBag()->add('error', 'User not found');
             }
@@ -87,6 +103,7 @@ class ResetPasswordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $user->setPasswordResetToken(null);
+            $user->setPasswordResetTokenLast(null);
 
             $formPassword = $form->get('password')->getData();
 

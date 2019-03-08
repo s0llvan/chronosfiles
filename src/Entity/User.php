@@ -101,6 +101,11 @@ class User implements UserInterface, \Serializable
      */
     private $password_reset_token;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $password_reset_token_last;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -320,6 +325,18 @@ class User implements UserInterface, \Serializable
     public function setPasswordResetToken(?string $password_reset_token): self
     {
         $this->password_reset_token = $password_reset_token;
+
+        return $this;
+    }
+
+    public function getPasswordResetTokenLast(): ?\DateTimeInterface
+    {
+        return $this->password_reset_token_last;
+    }
+
+    public function setPasswordResetTokenLast(?\DateTimeInterface $password_reset_token_last): self
+    {
+        $this->password_reset_token_last = $password_reset_token_last;
 
         return $this;
     }
