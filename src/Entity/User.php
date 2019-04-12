@@ -72,7 +72,7 @@ class User implements UserInterface, \Serializable
     private $roles = [];
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $encryptionKey;
 
@@ -122,37 +122,37 @@ class User implements UserInterface, \Serializable
         $this->categories = new ArrayCollection();
     }
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUsername() : ? string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function setUsername(string $username) : void
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
 
-    public function getEmail() : ? string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email) : void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
 
-    public function getPassword() : ? string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password) : void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
@@ -160,7 +160,7 @@ class User implements UserInterface, \Serializable
     /**
      * Retourne les rôles de l'user
      */
-    public function getRoles() : array
+    public function getRoles(): array
     {
         $roles = $this->roles;
 
@@ -172,7 +172,7 @@ class User implements UserInterface, \Serializable
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles) : void
+    public function setRoles(array $roles): void
     {
         $this->roles = $roles;
     }
@@ -182,7 +182,7 @@ class User implements UserInterface, \Serializable
      *
      * {@inheritdoc}
      */
-    public function getSalt() : ? string
+    public function getSalt(): ?string
     {
         // See "Do you need to use a Salt?" at https://symfony.com/doc/current/cookbook/security/entity_provider.html
         // we're using bcrypt in security.yml to encode the password, so
@@ -196,7 +196,7 @@ class User implements UserInterface, \Serializable
      *
      * {@inheritdoc}
      */
-    public function eraseCredentials() : void
+    public function eraseCredentials(): void
     {
         // Nous n'avons pas besoin de cette methode car nous n'utilions pas de plainPassword
         // Mais elle est obligatoire car comprise dans l'interface UserInterface
@@ -206,7 +206,7 @@ class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function serialize() : string
+    public function serialize(): string
     {
         return serialize([$this->id, $this->username, $this->password]);
     }
@@ -214,17 +214,17 @@ class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function unserialize($serialized) : void
+    public function unserialize($serialized): void
     {
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
-    public function getEncryptionKey() : ? string
+    public function getEncryptionKey(): ?string
     {
         return $this->encryptionKey;
     }
 
-    public function setEncryptionKey(string $encryptionKey) : self
+    public function setEncryptionKey(string $encryptionKey): self
     {
         $this->encryptionKey = $encryptionKey;
 
@@ -234,12 +234,12 @@ class User implements UserInterface, \Serializable
     /**
      * @return Collection|File[]
      */
-    public function getFiles() : Collection
+    public function getFiles(): Collection
     {
         return $this->files;
     }
 
-    public function addFile(File $file) : self
+    public function addFile(File $file): self
     {
         if (!$this->files->contains($file)) {
             $this->files[] = $file;
@@ -249,7 +249,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function removeFile(File $file) : self
+    public function removeFile(File $file): self
     {
         if ($this->files->contains($file)) {
             $this->files->removeElement($file);
@@ -265,12 +265,12 @@ class User implements UserInterface, \Serializable
     /**
      * @return Collection|Category[]
      */
-    public function getCategories() : Collection
+    public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function addCategory(Category $category) : self
+    public function addCategory(Category $category): self
     {
         if (!$this->categories->contains($category)) {
             $this->categories[] = $category;
@@ -280,7 +280,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function removeCategory(Category $category) : self
+    public function removeCategory(Category $category): self
     {
         if ($this->categories->contains($category)) {
             $this->categories->removeElement($category);
@@ -296,31 +296,31 @@ class User implements UserInterface, \Serializable
     /**
      * @return Collection|File[]
      */
-    public function getUncategorizedFiles() : Collection
+    public function getUncategorizedFiles(): Collection
     {
         return $this->files->filter(function ($file) {
             return !$file->getCategory();
         });
     }
 
-    public function getEmailConfirmed() : ? bool
+    public function getEmailConfirmed(): ?bool
     {
         return $this->email_confirmed;
     }
 
-    public function setEmailConfirmed(bool $email_confirmed) : self
+    public function setEmailConfirmed(bool $email_confirmed): self
     {
         $this->email_confirmed = $email_confirmed;
 
         return $this;
     }
 
-    public function getEmailConfirmationToken() : ? string
+    public function getEmailConfirmationToken(): ?string
     {
         return $this->email_confirmation_token;
     }
 
-    public function setEmailConfirmationToken(? string $email_confirmation_token) : self
+    public function setEmailConfirmationToken(?string $email_confirmation_token): self
     {
         $this->email_confirmation_token = $email_confirmation_token;
 

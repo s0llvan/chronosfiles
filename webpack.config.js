@@ -15,6 +15,8 @@ Encore
 
     .addEntry('profil', './assets/js/profil.js')
 
+    .addEntry('file', './assets/js/file.js')
+
     // uncomment if you use Sass/SCSS files
     .enableSassLoader()
 

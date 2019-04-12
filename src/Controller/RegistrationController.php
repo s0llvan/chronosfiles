@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
@@ -15,7 +15,7 @@ use Defuse\Crypto\KeyProtectedByPassword;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Repository\UserRepository;
 
-class RegistrationController extends Controller
+class RegistrationController extends AbstractController
 {
     /**
      * @Route("/register", name="register")

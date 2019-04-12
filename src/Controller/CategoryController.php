@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\CategoryType;
 use App\Entity\Category;
 
-class CategoryController extends Controller
+class CategoryController extends AbstractController
 {
     /**
     * @Route("/categories", name="categories")

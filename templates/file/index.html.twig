@@ -4,72 +4,86 @@
 
 {% block body %}
 <div class="ui grid stackable">
-    <div class="four wide column">
-        <div class="ui fluid vertical menu">
-            {{ form_start(form) }}
-            <div class="item">
+	<div class="four wide column">
+		<div class="ui fluid vertical menu">
+			{{ form_start(form) }}
+			<div class="item">
+				<div class="ui input icon">
+					{{ form_widget(form.search) }}
+					<i class="icon search"></i>
+				</div>
+			</div>
+			{{ form_end(form) }}
+			<a class="item header {% if route == 'files' %} active {% endif %}" href="{{ path('files') }}">
+				All
+				<div class="ui label">{{ app.user.files|length }}</div>
+			</a>
+			{% for category in app.user.categories %}
+			<a class="item {% if route == 'files_category' and app.request.attributes.get('id') == category.id %} active {% endif %}" href="{{ path('files_category', {'id': category.id}) }}">
+				{{ category.name }}
+				<div class="ui label">{{ category.files|length }}</div>
+			</a>
+			{% endfor %}
+			<a class="item header {% if route == 'files_uncategorized' %} active {% endif %}" href="{{ path('files_uncategorized') }}">
+				Uncategorized
+				<div class="ui label">{{ app.user.getUncategorizedFiles|length }}</div>
+			</a>
+		</div>
+	</div>
+	
+	{% if files|length > 0 %}
+	<div class="twelve wide column">
+		<table class="ui basic table stackable striped">
+			<tbody>
+				{% for file in files %}
+				<tr>
+					<td>{{ file.fileName|length > 70 ? file.fileName|slice(0,70) ~ '...' : file.fileName }}</td>
 
-                <div class="ui input icon">
-                    {{ form_widget(form.search) }}
-                    <i class="icon search"></i>
-                </div>
+					{% if file.fileSize < 1024 %}
+					<td>{{ (file.fileSize)|round(2) }} Bytes</td>
+					{% elseif file.fileSize < 1024 * 64 %}
+					<td>{{ (file.fileSize / 1024)|round(2) }} Ko</td>
+					{% else %}
+					<td>{{ (file.fileSize / 1024 / 1024)|round(2) }} Mo</td>
+					{% endif %}
 
-            </div>
-            {{ form_end(form) }}
-            <a class="item header {% if route == 'files' %} active {% endif %}" href="{{ path('files') }}">
-                All
-                <div class="ui label">{{ app.user.files|length }}</div>
-            </a>
-            {% for category in app.user.categories %}
-            <a class="item {% if route == 'files_category' %} active {% endif %}" href="{{ path('files_category', {'id': category.id}) }}">
-                {{ category.name }}
-                <div class="ui label">{{ category.files|length }}</div>
-            </a>
-            {% endfor %}
-            <a class="item header {% if route == 'files_uncategorized' %} active {% endif %}" href="{{ path('files_uncategorized') }}">
-                Uncategorized
-                <div class="ui label">{{ app.user.getUncategorizedFiles|length }}</div>
-            </a>
-        </div>
-    </div>
-    
-    {% if files|length > 0 %}
-    <div class="twelve wide column">
-        <table class="ui basic table stackable striped">
-            <tbody>
-                {% for file in files %}
-                <tr>
-                    <td>{{ file.fileName|length > 70 ? file.fileName|slice(0,70) ~ '...' : file.fileName }}</td>
+					<td>{{ file.createdAt|date("d/m/Y") }}</td>
 
-                    {% if file.fileSize < 1024 %}
-                    <td>{{ (file.fileSize)|round(2) }} Bytes</td>
-                    {% elseif file.fileSize < 1024 * 64 %}
-                    <td>{{ (file.fileSize / 1024)|round(2) }} Ko</td>
-                    {% else %}
-                    <td>{{ (file.fileSize / 1024 / 1024)|round(2) }} Mo</td>
-                    {% endif %}
+					<td class="right aligned">
+						<a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">
+							<i class="download icon"></i>
+						</a>
+					</td>
+					<td class="right aligned">
+						<a href="#" class="move-file" data-filename="{{ file.fileName }}" data-id="{{ file.id }}">
+							<i class="reply icon"></i>
+						</a>
+					</td>
+					<td class="right aligned">
+						<a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">
+							<i class="trash icon"></i>
+						</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% endif %}
+</div>
 
-                    <td>{{ file.createdAt|date("d/m/Y") }}</td>
-
-                    <td class="right aligned">
-                        <a href="{{ path('download', {'fileNameLocation': file.fileNameLocation}) }}">
-                            <i class="download icon"></i>
-                        </a>
-                    </td>
-                    <td class="right aligned">
-                        <a href="{{ path('delete', {'fileNameLocation': file.fileNameLocation}) }}">
-                            <i class="trash icon"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
+<div class="ui mini modal">
+	<div class="header"></div>
+	<div class="content">
+		{{ form(formMoveFile, {'attr': {'id': 'moveFileCategory'}}) }}
+	</div>
+	<div class="actions">
+		<button class="ui blue button" onclick="document.getElementById('moveFileCategory').submit()">Move</button>
+		<div class="ui cancel button">Cancel</div>
+	</div>
 </div>
 {% endblock %}
 
 {% block javascript %}
-
+	{{ encore_entry_script_tags('file') }}
 {% endblock %}
