@@ -271,7 +271,7 @@ class FileController extends AbstractController
                 'user' => $user,
                 'id' => $id
             ])) {
-                if ($user->getCategories()->contains($category)) {
+                if ($user->getCategories()->contains($category) || !$category) {
                     $file->setCategory($category);
 
                     $em = $this->getDoctrine()->getManager();

@@ -13,10 +13,7 @@ class FileMoveType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $categories = $options['user']->getCategories()->toArray();
-        $uncategorized = new Category();
-        $uncategorized->setName('Uncategorized');
-        $categories = array_merge([$uncategorized], $categories);
+        $categories = $options['user']->getCategories();
 
         $builder
             ->add('file', HiddenType::class)
@@ -27,8 +24,8 @@ class FileMoveType extends AbstractType
                 'attr' => [
                     'class' => 'ui fluid dropdown'
                 ],
-                'empty_data' => [],
-                'required' => true,
+                'empty_data' => null,
+                'required' => false,
                 'data' => null,
                 'choice_value' => function (Category $entity = null) {
                     return $entity ? $entity->getId() : '';

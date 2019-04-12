@@ -10,5 +10,7 @@ $(function () {
 		$('.ui.vertical.menu').fadeToggle();
 	});
 
-	$('.ui.dropdown').dropdown();
+	$('.ui.dropdown').dropdown({
+		clearable: true
+	});
 });
