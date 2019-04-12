@@ -58,10 +58,13 @@ class FileController extends AbstractController
     /**
      * @Route("/files/search", name="files_search")
      */
-    public function search(Request $request)
+    public function search(Request $request, FileRepository $fileRepository)
     {
-        $files = $this->getUser()->getFiles();
+        $user = $this->getUser();
+        $files = $user->getFiles();
         $filesResults = [];
+
+        $formMoveFile = $this->checkMoveFileForm($user, $request, $fileRepository);
 
         $form = $this->createForm(SearchFileType::class);
         $form->handleRequest($request);
@@ -95,7 +98,8 @@ class FileController extends AbstractController
 
         return $this->render('file/index.html.twig', [
             'files' => $filesResults,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'formMoveFile' => $formMoveFile->createView()
         ]);
     }
 
