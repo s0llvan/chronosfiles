@@ -27,14 +27,34 @@ $(".move-all-file").click(function () {
 	}
 });
 
-$(".checkbox.select-all").click(function () {
-	let checked = $(this).find("input").is(":checked");
+$(".checkbox").click(function () {
+	var id = $(this).find("input").data("id");
+	var initialChecked = $(this).find("input").is(":checked");
+	var checked = !initialChecked;
 
-	if (checked) {
-		$("table th .move-all-file").hide();
-	} else {
-		$("table th .move-all-file").show();
+	$(".checkbox").each(function () {
+
+		if (checked) {
+			return false;
+		}
+
+		if ($(this).find("input").data("id") != id) {
+			checked = $(this).find("input").is(":checked");
+		}
+	});
+
+	if ($(this).hasClass('select-all')) {
+		checked = !initialChecked;
 	}
 
+	if (checked) {
+		$("table th .move-all-file").show();
+	} else {
+		$("table th .move-all-file").hide();
+	}
+});
+
+$(".checkbox.select-all").click(function () {
+	let checked = $(this).find("input").is(":checked");
 	$(this).closest("table").find(".checkbox:not(.select-all) input").prop("checked", !checked);
 });
