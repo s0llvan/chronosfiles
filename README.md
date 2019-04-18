@@ -14,7 +14,7 @@ ChronosFiles is a web application hosting encrypted files
 ![Home page](https://i.ibb.co/B2081BG/Screenshot-2019-3-4-Chronos-Files-Index.png)
 
 **Files page**
-![Files pages](https://i.ibb.co/fx4H9T2/Screenshot-2019-3-4-Chronos-Files-Files.png)
+![Files pages](https://i.ibb.co/g7VgQzS/Screenshot-2019-4-18-Chronos-Files-Files.png)
 
 ## Documentation
 
