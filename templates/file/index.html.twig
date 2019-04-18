@@ -34,10 +34,42 @@
 	{% if files|length > 0 %}
 	<div class="twelve wide column">
 		<table class="ui basic table stackable striped">
+			<thead>
+				<tr>
+					<th>
+						<div class="ui checkbox select-all">
+							<input type="checkbox">
+							<label>
+								Name
+							</label>
+						</div>
+					</th>
+					<th>
+						Size
+					</th>
+					<th>
+						Uploaded
+					</th>
+					<th></th>
+					<th class="right aligned">
+						<a href="#" class="move-all-file" style="display:none;">
+							<i class="reply all icon"></i>
+						</a>
+					</th>
+					<th></th>
+				</tr>
+			</thead>
 			<tbody>
 				{% for file in files %}
 				<tr>
-					<td>{{ file.fileName|length > 70 ? file.fileName|slice(0,70) ~ '...' : file.fileName }}</td>
+					<td>
+						<div class="ui checkbox">
+							<input type="checkbox" value="{{ file.id }}" data-id="{{ file.id }}">
+							<label>
+								{{ file.fileName|length > 70 ? file.fileName|slice(0,70) ~ '...' : file.fileName }}
+							</label>
+						</div>
+					</td>
 
 					{% if file.fileSize < 1024 %}
 					<td>{{ (file.fileSize)|round(2) }} Bytes</td>

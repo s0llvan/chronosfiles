@@ -2,52 +2,58 @@
 
 @media only screen and (max-width: 767px) {
 
-    [class*="mobile hidden"],
-    [class*="tablet only"]:not(.mobile),
-    [class*="computer only"]:not(.mobile),
-    [class*="large monitor only"]:not(.mobile),
-    [class*="widescreen monitor only"]:not(.mobile),
-    [class*="or lower hidden"] {
-        display: none !important;
-    }
+	[class*="mobile hidden"],
+	[class*="tablet only"]:not(.mobile),
+	[class*="computer only"]:not(.mobile),
+	[class*="large monitor only"]:not(.mobile),
+	[class*="widescreen monitor only"]:not(.mobile),
+	[class*="or lower hidden"] {
+		display: none !important;
+	}
 
-    .vertical.menu>.stackable {
-        width: 100%;
-    }
+	.vertical.menu>.stackable {
+		width: 100%;
+	}
 }
 
 .ui.vertical.menu.navbar {
-    margin-top: -15px !important;
-    width: 100%;
-    display: none;
-    margin-bottom: 20px;
+	margin-top: -15px !important;
+	width: 100%;
+	display: none;
+	margin-bottom: 20px;
 }
 
 .ui.menu {
-    width: 100%;
+	width: 100%;
 }
 
 .mobile.narrow.main {
-    padding: 0;
+	padding: 0;
 }
 
 .ui.page.grid {
-    margin-top: 0;
-    padding: 0;
+	margin-top: 0;
+	padding: 0;
 }
 
 .ui.main.container {
-    padding-top: 20px;
+	padding-top: 20px;
 }
 
 .ui.grid.stackable>.six.wide.column {
-    text-align: center;
+	text-align: center;
 }
 
 .ui.basic.modal {
 
-    .content,
-    .actions {
-        text-align: center;
-    }
+	.content,
+	.actions {
+		text-align: center;
+	}
+}
+
+@media only screen and (min-width: 767px) {
+	.ui.table thead {
+		height: 48px;
+	}
 }

@@ -13,4 +13,7 @@ $(function () {
 	$('.ui.dropdown').dropdown({
 		clearable: true
 	});
+
+	$('.ui.checkbox')
+		.checkbox();
 });
