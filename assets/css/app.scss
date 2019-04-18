@@ -14,13 +14,21 @@
 	.vertical.menu>.stackable {
 		width: 100%;
 	}
+
+	.ui.table tbody tr td.right.aligned {
+		text-align: center;
+	}
+
+	.ui.table tbody tr td i {
+		font-size: 20px;
+	}
 }
 
 .ui.vertical.menu.navbar {
 	margin-top: -15px !important;
 	width: 100%;
 	display: none;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 }
 
 .ui.menu {

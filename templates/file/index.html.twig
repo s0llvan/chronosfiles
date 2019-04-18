@@ -52,11 +52,15 @@
 					</th>
 					<th></th>
 					<th class="right aligned">
-						<a href="#" class="move-all-file" style="display:none;">
+						<a href="#" class="move-all-file control" style="display:none;">
 							<i class="reply all icon"></i>
 						</a>
 					</th>
-					<th></th>
+					<th class="right aligned">
+						<a href="#" class="delete-all-file control" style="display:none;">
+							<i class="trash icon"></i>
+						</a>
+					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -64,7 +68,7 @@
 				<tr>
 					<td>
 						<div class="ui checkbox">
-							<input type="checkbox" value="{{ file.id }}" data-id="{{ file.id }}">
+							<input type="checkbox" value="{{ file.id }}" data-id="{{ file.id }}" data-name="{{ file.filename }}">
 							<label>
 								{{ file.fileName|length > 70 ? file.fileName|slice(0,70) ~ '...' : file.fileName }}
 							</label>
@@ -104,14 +108,29 @@
 	{% endif %}
 </div>
 
-<div class="ui mini modal">
+<div class="ui mini modal move">
 	<div class="header"></div>
 	<div class="content">
-		{{ form(formMoveFile, {'attr': {'id': 'moveFileCategory'}}) }}
+		{{ form(formMoveFile, {'attr': {'id': 'moveFilesCategory'}}) }}
 	</div>
 	<div class="actions">
-		<button class="ui blue button" onclick="document.getElementById('moveFileCategory').submit()">Move</button>
+		<button class="ui blue button" onclick="document.getElementById('moveFilesCategory').submit()">Move</button>
 		<div class="ui cancel button">Cancel</div>
+	</div>
+</div>
+
+<div class="ui tiny modal delete">
+	<div class="header"></div>
+	<div class="content">
+		Are you sure you want to delete all this files ?
+		<ul class="files">
+			
+		</ul>
+		{{ form(formDeleteFile, {'attr': {'id': 'deleteFiles'}}) }}
+	</div>
+	<div class="actions">
+		<button class="ui green button" onclick="document.getElementById('deleteFiles').submit()">Yes</button>
+		<div class="ui red cancel button">No</div>
 	</div>
 </div>
 {% endblock %}

@@ -16,6 +16,7 @@ use App\Form\SearchFileType;
 use App\Form\FileMoveType;
 use App\Repository\FileRepository;
 use App\Entity\User;
+use App\Form\FileDeleteType;
 
 class FileController extends AbstractController
 {
@@ -26,7 +27,8 @@ class FileController extends AbstractController
 	{
 		$user = $this->getUser();
 
-		$formMoveFile = $this->checkMoveFileForm($user, $request, $fileRepository);
+		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
+		$formDeleteFile = $this->checkDeleteFileForm($request);
 
 		$files = $user->getFiles();
 
@@ -51,7 +53,8 @@ class FileController extends AbstractController
 		return $this->render('file/index.html.twig', [
 			'files' => $files,
 			'form' => $form->createView(),
-			'formMoveFile' => $formMoveFile->createView()
+			'formMoveFile' => $formMoveFile->createView(),
+			'formDeleteFile' => $formDeleteFile->createView()
 		]);
 	}
 
@@ -64,7 +67,8 @@ class FileController extends AbstractController
 		$files = $user->getFiles();
 		$filesResults = [];
 
-		$formMoveFile = $this->checkMoveFileForm($user, $request, $fileRepository);
+		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
+		$formDeleteFile = $this->checkDeleteFileForm($request);
 
 		$form = $this->createForm(SearchFileType::class);
 		$form->handleRequest($request);
@@ -99,7 +103,8 @@ class FileController extends AbstractController
 		return $this->render('file/index.html.twig', [
 			'files' => $filesResults,
 			'form' => $form->createView(),
-			'formMoveFile' => $formMoveFile->createView()
+			'formMoveFile' => $formMoveFile->createView(),
+			'formDeleteFile' => $formDeleteFile->createView()
 		]);
 	}
 
@@ -114,7 +119,8 @@ class FileController extends AbstractController
 			return $this->redirect($this->generateUrl('files'));
 		}
 
-		$formMoveFile = $this->checkMoveFileForm($user, $request, $fileRepository);
+		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
+		$formDeleteFile = $this->checkDeleteFileForm($request);
 
 		$files = $category->getFiles();
 
@@ -140,7 +146,8 @@ class FileController extends AbstractController
 			'files' => $files,
 			'category' => $category,
 			'form' => $form->createView(),
-			'formMoveFile' => $formMoveFile->createView()
+			'formMoveFile' => $formMoveFile->createView(),
+			'formDeleteFile' => $formDeleteFile->createView()
 		]);
 	}
 
@@ -225,7 +232,8 @@ class FileController extends AbstractController
 		$user = $this->getUser();
 		$files = $user->getUncategorizedFiles();
 
-		$formMoveFile = $this->checkMoveFileForm($user, $request, $fileRepository);
+		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
+		$formDeleteFile = $this->checkDeleteFileForm($request);
 
 		$user_key_encoded = $this->get('session')->get('encryption_key');
 		$user_key = Key::loadFromAsciiSafeString($user_key_encoded);
@@ -248,7 +256,8 @@ class FileController extends AbstractController
 		return $this->render('file/index.html.twig', [
 			'files' => $files,
 			'form' => $form->createView(),
-			'formMoveFile' => $formMoveFile->createView()
+			'formMoveFile' => $formMoveFile->createView(),
+			'formDeleteFile' => $formDeleteFile->createView()
 		]);
 	}
 
@@ -259,35 +268,63 @@ class FileController extends AbstractController
 		]);
 	}
 
-	private function checkMoveFileForm(User $user, Request $request, FileRepository $fileRepository)
+	private function checkMoveFileForm(Request $request, FileRepository $fileRepository)
 	{
-		$formMoveFile = $this->createForm(FileMoveType::class, null, [
+		$user = $this->getUser();
+		$form = $this->createForm(FileMoveType::class, null, [
 			'user' => $user
 		]);
 
-		$formMoveFile->handleRequest($request);
+		$form->handleRequest($request);
 
-		if ($formMoveFile->isSubmitted() && $formMoveFile->isValid()) {
-			$category = $formMoveFile->get('category')->getData();
-			$jsonId = $formMoveFile->get('file')->getData();
+		if ($form->isSubmitted() && $form->isValid()) {
+			$category = $form->get('category')->getData();
+			$json = $form->get('file')->getData();
 
-			if ($jsonId = json_decode($jsonId)) {
-				foreach ($jsonId as $id) {
-					if ($file = $fileRepository->findOneBy([
-						'user' => $user,
-						'id' => $id
-					])) {
+			if ($id = json_decode($json)) {
+				if ($files = $fileRepository->findBy([
+					'user' => $user,
+					'id' => $id
+				])) {
+					foreach ($files as $file) {
 						if ($user->getCategories()->contains($category) || !$category) {
 							$file->setCategory($category);
-
-							$em = $this->getDoctrine()->getManager();
-							$em->flush();
 						}
 					}
+
+					$em = $this->getDoctrine()->getManager();
+					$em->flush();
 				}
 			}
 		}
 
-		return $formMoveFile;
+		return $form;
+	}
+
+	private function checkDeleteFileForm(Request $request)
+	{
+		$form = $this->createForm(FileDeleteType::class);
+
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$json = $form->get('file')->getData();
+
+			if ($files = json_decode($json)) {
+				$files = $this->getUser()->getFiles()->filter(
+					function ($file) use ($files) {
+						return in_array($file->getId(), $files);
+					}
+				);
+
+				$em = $this->getDoctrine()->getManager();
+				foreach ($files as $file) {
+					$em->remove($file);
+				}
+				$em->flush();
+			}
+		}
+
+		return $form;
 	}
 }

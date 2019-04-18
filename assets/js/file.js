@@ -1,5 +1,5 @@
 $(".move-file").click(function () {
-	let modal = $('.ui.modal');
+	let modal = $('.ui.modal.move');
 	let filename = $(this).data("filename");
 	let id = $(this).data("id");
 	id = JSON.stringify([id]);
@@ -10,7 +10,7 @@ $(".move-file").click(function () {
 });
 
 $(".move-all-file").click(function () {
-	let modal = $('.ui.modal');
+	let modal = $('.ui.modal.move');
 	let files = $('.checkbox.ui:not(.select-all) input[type=checkbox]:checked');
 
 	if (files.length > 0) {
@@ -22,6 +22,27 @@ $(".move-all-file").click(function () {
 		json = JSON.stringify(json);
 
 		modal.find('input#file_move_file').val(json);
+		modal.find('.header').text(files.length + ' files selected');
+		modal.modal('show');
+	}
+});
+
+$(".delete-all-file").click(function () {
+	let modal = $('.ui.modal.delete');
+	let files = $('.checkbox.ui:not(.select-all) input[type=checkbox]:checked');
+
+	if (files.length > 0) {
+
+		modal.find("ul.files").empty();
+
+		var json = [];
+		files.each(function () {
+			json.push($(this).data("id"));
+			modal.find("ul.files").append("<li>" + $(this).data("name") + "</li>");
+		});
+		json = JSON.stringify(json);
+
+		modal.find('input#file_delete_file').val(json);
 		modal.find('.header').text(files.length + ' files selected');
 		modal.modal('show');
 	}
@@ -48,9 +69,9 @@ $(".checkbox").click(function () {
 	}
 
 	if (checked) {
-		$("table th .move-all-file").show();
+		$("table th a.control").show();
 	} else {
-		$("table th .move-all-file").hide();
+		$("table th a.control").hide();
 	}
 });
 
