@@ -15,8 +15,12 @@ use App\Entity\Category;
 use App\Form\SearchFileType;
 use App\Form\FileMoveType;
 use App\Repository\FileRepository;
-use App\Entity\User;
 use App\Form\FileDeleteType;
+use Wamania\ZipStreamedResponseBundle\Response\ZipStreamer\ZipStreamer;
+use Wamania\ZipStreamedResponseBundle\Response\ZipStreamer\ZipStreamerFile;
+use Wamania\ZipStreamedResponseBundle\Response\ZipStreamer\ZipStreamerBigFile;
+use Wamania\ZipStreamedResponseBundle\Response\ZipStreamedResponse;
+use App\Form\FileDownloadType;
 
 class FileController extends AbstractController
 {
@@ -29,6 +33,11 @@ class FileController extends AbstractController
 
 		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
 		$formDeleteFile = $this->checkDeleteFileForm($request);
+		$formDownloadFile = $this->checkDownloadFileForm($request);
+
+		if ($formDownloadFile instanceof ZipStreamedResponse) {
+			return $formDownloadFile;
+		}
 
 		$files = $user->getFiles();
 
@@ -54,7 +63,8 @@ class FileController extends AbstractController
 			'files' => $files,
 			'form' => $form->createView(),
 			'formMoveFile' => $formMoveFile->createView(),
-			'formDeleteFile' => $formDeleteFile->createView()
+			'formDeleteFile' => $formDeleteFile->createView(),
+			'formDownloadFile' => $formDownloadFile->createView()
 		]);
 	}
 
@@ -69,6 +79,11 @@ class FileController extends AbstractController
 
 		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
 		$formDeleteFile = $this->checkDeleteFileForm($request);
+		$formDownloadFile = $this->checkDownloadFileForm($request);
+
+		if ($formDownloadFile instanceof ZipStreamedResponse) {
+			return $formDownloadFile;
+		}
 
 		$form = $this->createForm(SearchFileType::class);
 		$form->handleRequest($request);
@@ -104,7 +119,8 @@ class FileController extends AbstractController
 			'files' => $filesResults,
 			'form' => $form->createView(),
 			'formMoveFile' => $formMoveFile->createView(),
-			'formDeleteFile' => $formDeleteFile->createView()
+			'formDeleteFile' => $formDeleteFile->createView(),
+			'formDownloadFile' => $formDownloadFile->createView()
 		]);
 	}
 
@@ -121,6 +137,11 @@ class FileController extends AbstractController
 
 		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
 		$formDeleteFile = $this->checkDeleteFileForm($request);
+		$formDownloadFile = $this->checkDownloadFileForm($request);
+
+		if ($formDownloadFile instanceof ZipStreamedResponse) {
+			return $formDownloadFile;
+		}
 
 		$files = $category->getFiles();
 
@@ -147,7 +168,8 @@ class FileController extends AbstractController
 			'category' => $category,
 			'form' => $form->createView(),
 			'formMoveFile' => $formMoveFile->createView(),
-			'formDeleteFile' => $formDeleteFile->createView()
+			'formDeleteFile' => $formDeleteFile->createView(),
+			'formDownloadFile' => $formDownloadFile->createView()
 		]);
 	}
 
@@ -234,6 +256,11 @@ class FileController extends AbstractController
 
 		$formMoveFile = $this->checkMoveFileForm($request, $fileRepository);
 		$formDeleteFile = $this->checkDeleteFileForm($request);
+		$formDownloadFile = $this->checkDownloadFileForm($request);
+
+		if ($formDownloadFile instanceof ZipStreamedResponse) {
+			return $formDownloadFile;
+		}
 
 		$user_key_encoded = $this->get('session')->get('encryption_key');
 		$user_key = Key::loadFromAsciiSafeString($user_key_encoded);
@@ -257,7 +284,8 @@ class FileController extends AbstractController
 			'files' => $files,
 			'form' => $form->createView(),
 			'formMoveFile' => $formMoveFile->createView(),
-			'formDeleteFile' => $formDeleteFile->createView()
+			'formDeleteFile' => $formDeleteFile->createView(),
+			'formDownloadFile' => $formDownloadFile->createView()
 		]);
 	}
 
@@ -322,6 +350,58 @@ class FileController extends AbstractController
 					$em->remove($file);
 				}
 				$em->flush();
+			}
+		}
+
+		return $form;
+	}
+
+	private function checkDownloadFileForm(Request $request)
+	{
+		$form = $this->createForm(FileDownloadType::class);
+
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$json = $form->get('file')->getData();
+
+			if ($files = json_decode($json)) {
+				$files = $this->getUser()->getFiles()->filter(
+					function ($file) use ($files) {
+						return in_array($file->getId(), $files);
+					}
+				);
+
+				if (count($files)) {
+
+					$dateNow = new \DateTime();
+
+					$zipFilename = $dateNow->format('d-m-Y-H-i') . '.zip';
+
+					$zipStreamer = new ZipStreamer($zipFilename);
+
+					$user_key_encoded = $this->get('session')->get('encryption_key');
+					$user_key = Key::loadFromAsciiSafeString($user_key_encoded);
+
+					foreach ($files as $file) {
+						$fileNameLocation = $file->getFileNameLocation();
+						$fileName = $file->getFileName();
+						$fileName = Crypto::decrypt($fileName, $user_key);
+						$filePath = $this->getParameter('upload_directory') . $fileNameLocation;
+						$newFilePath = $filePath . '.bak';
+
+						CryptoFile::decryptFile($filePath, $newFilePath, $user_key);
+
+						$zipStreamer->add(
+							new ZipStreamerFile($newFilePath, $fileName),
+							$fileName
+						);
+
+						unlink($newFilePath);
+					}
+
+					return new ZipStreamedResponse($zipStreamer);
+				}
 			}
 		}
 

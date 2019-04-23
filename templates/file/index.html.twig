@@ -50,7 +50,11 @@
 					<th>
 						Uploaded
 					</th>
-					<th></th>
+					<th class="right aligned">
+						<a href="#" class="download-all-file control" style="display:none;">
+							<i class="download icon"></i>
+						</a>
+					</th>
 					<th class="right aligned">
 						<a href="#" class="move-all-file control" style="display:none;">
 							<i class="reply all icon"></i>
@@ -107,6 +111,8 @@
 	</div>
 	{% endif %}
 </div>
+
+{{ form(formDownloadFile, {'attr': {'id': 'downloadFiles'}}) }}
 
 <div class="ui mini modal move">
 	<div class="header"></div>

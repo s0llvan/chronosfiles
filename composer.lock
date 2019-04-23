@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec21b43034b65dde53f45b2d70dc8ab9",
+    "content-hash": "7cb68ba549d7fa1c08a9b498295791dc",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -5586,6 +5586,45 @@
                 "templating"
             ],
             "time": "2019-03-23T14:28:58+00:00"
+        },
+        {
+            "name": "wamania/zip-streamed-response-bundle",
+            "version": "1.0",
+            "target-dir": "Wamania/ZipStreamedResponseBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wamania/ZipStreamedResponseBundle.git",
+                "reference": "34ab0d57164ace7b9a849ca2d0ab6313f2e160b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wamania/ZipStreamedResponseBundle/zipball/34ab0d57164ace7b9a849ca2d0ab6313f2e160b2",
+                "reference": "34ab0d57164ace7b9a849ca2d0ab6313f2e160b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": ">=2.5"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Wamania\\ZipStreamedResponseBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wamania",
+                    "homepage": "https://github.com/wamania"
+                }
+            ],
+            "description": "A symfony Response to build and stream Zip on the fly",
+            "homepage": "https://github.com/wamania/ZipStreamedResponseBundle",
+            "time": "2016-10-17T13:52:58+00:00"
         },
         {
             "name": "webmozart/assert",

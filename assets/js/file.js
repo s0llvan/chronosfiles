@@ -48,6 +48,23 @@ $(".delete-all-file").click(function () {
 	}
 });
 
+$(".download-all-file").click(function () {
+	let form = $("form#downloadFiles");
+	let files = $('.checkbox.ui:not(.select-all) input[type=checkbox]:checked');
+
+	if (files.length > 0) {
+
+		var json = [];
+		files.each(function () {
+			json.push($(this).data("id"));
+		});
+		json = JSON.stringify(json);
+
+		form.find('input#file_download_file').val(json);
+		form.submit();
+	}
+});
+
 $(".checkbox").click(function () {
 	var id = $(this).find("input").data("id");
 	var initialChecked = $(this).find("input").is(":checked");
