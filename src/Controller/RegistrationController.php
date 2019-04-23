@@ -17,86 +17,92 @@ use App\Repository\UserRepository;
 
 class RegistrationController extends AbstractController
 {
-    /**
-     * @Route("/register", name="register")
-     */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher, \Swift_Mailer $mailer)
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+	/**
+	 * @Route("/register", name="register")
+	 */
+	public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher, \Swift_Mailer $mailer, UserRepository $userRepository)
+	{
+		$user = new User();
+		$form = $this->createForm(UserType::class, $user);
+		$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+		if ($form->isSubmitted() && $form->isValid()) {
 
-            $token = bin2hex(random_bytes(32));
+			$token = bin2hex(random_bytes(32));
 
-            $user->setEmailConfirmationToken($token);
+			$user->setEmailConfirmationToken($token);
 
-            $confirmation_link = $this->generateUrl('register_confirmation', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+			$confirmation_link = $this->generateUrl('register_confirmation', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $message = (new \Swift_Message('ChronosFiles - Registration'))
-                ->setFrom('donotreply@chronosfiles.fr')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        'emails/registration.html.twig',
-                        [
-                            'user' => $user,
-                            'confirmation_link' => $confirmation_link
-                        ]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
+			$message = (new \Swift_Message('ChronosFiles - Registration'))
+				->setFrom('donotreply@chronosfiles.fr')
+				->setTo($user->getEmail())
+				->setBody(
+					$this->renderView(
+						'emails/registration.html.twig',
+						[
+							'user' => $user,
+							'confirmation_link' => $confirmation_link
+						]
+					),
+					'text/html'
+				);
+			$mailer->send($message);
 
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
+			$password = $passwordEncoder->encodePassword($user, $user->getPassword());
+			$user->setPassword($password);
 
-            $user->setRoles(['ROLE_USER']);
+			$roles = ['ROLE_USER'];
 
-            $password = $form->get('password')->getData();
-            $password = sha1($password);
+			if ($userRepository->count([]) <= 0) {
+				$roles = ['ROLE_ADMIN'];
+			}
 
-            $protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($password);
-            $protected_key_encoded = $protected_key->saveToAsciiSafeString();
+			$user->setRoles($roles);
 
-            $user->setEncryptionKey($protected_key_encoded);
+			$password = $form->get('password')->getData();
+			$password = sha1($password);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+			$protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($password);
+			$protected_key_encoded = $protected_key->saveToAsciiSafeString();
 
-            $event = new GenericEvent($user);
-            $eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
+			$user->setEncryptionKey($protected_key_encoded);
 
-            $this->get('session')->getFlashBag()->add('success', 'Please click on the link sent by email to confirm your account');
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
 
-            return $this->redirectToRoute('register');
-        }
+			$event = new GenericEvent($user);
+			$eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
 
-        return $this->render('registration.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
+			$this->get('session')->getFlashBag()->add('success', 'Please click on the link sent by email to confirm your account');
 
-    /**
-     * @Route("/register-confirmation/{token}", name="register_confirmation")
-     */
-    public function registerConfirmationAction(Request $request, $token, UserRepository $userRepository)
-    {
-        if ($user = $userRepository->findOneBy(['email_confirmation_token' => $token])) {
+			return $this->redirectToRoute('register');
+		}
 
-            $user->setEmailConfirmationToken(null);
-            $user->setEmailConfirmed(true);
+		return $this->render('registration.html.twig', [
+			'form' => $form->createView()
+		]);
+	}
 
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
+	/**
+	 * @Route("/register-confirmation/{token}", name="register_confirmation")
+	 */
+	public function registerConfirmationAction(Request $request, $token, UserRepository $userRepository)
+	{
+		if ($user = $userRepository->findOneBy(['email_confirmation_token' => $token])) {
 
-            $this->get('session')->getFlashBag()->add('success', 'Registration completed, you can now log in !');
-        } else {
-            $this->get('session')->getFlashBag()->add('error', 'Wrong token !');
-        }
+			$user->setEmailConfirmationToken(null);
+			$user->setEmailConfirmed(true);
 
-        return $this->redirectToRoute('login');
-    }
+			$em = $this->getDoctrine()->getManager();
+			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Registration completed, you can now log in !');
+		} else {
+			$this->get('session')->getFlashBag()->add('error', 'Wrong token !');
+		}
+
+		return $this->redirectToRoute('login');
+	}
 }
