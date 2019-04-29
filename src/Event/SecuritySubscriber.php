@@ -15,51 +15,61 @@ use Defuse\Crypto\KeyProtectedByPassword;
 
 class SecuritySubscriber implements EventSubscriberInterface
 {
-    private $container;
-    private $entityManager;
-    private $tokenStorage;
-    private $authenticationUtils;
+	private $container;
+	private $entityManager;
+	private $tokenStorage;
+	private $authenticationUtils;
 
-    public function __construct(ContainerInterface $container, TokenStorageInterface $tokenStorage, AuthenticationUtils $authenticationUtils)
-    {
-        $this->container = $container;
-        $this->entityManager = $container->get('doctrine.orm.entity_manager');
-        $this->tokenStorage = $tokenStorage;
-        $this->authenticationUtils = $authenticationUtils;
-    }
+	public function __construct(ContainerInterface $container, TokenStorageInterface $tokenStorage, AuthenticationUtils $authenticationUtils)
+	{
+		$this->container = $container;
+		$this->entityManager = $container->get('doctrine.orm.entity_manager');
+		$this->tokenStorage = $tokenStorage;
+		$this->authenticationUtils = $authenticationUtils;
+	}
 
-    public static function getSubscribedEvents()
-    {
-        return array(
-            AuthenticationEvents::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
-            SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
-        );
-    }
+	public static function getSubscribedEvents()
+	{
+		return array(
+			AuthenticationEvents::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
+			SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
+		);
+	}
 
-    public function onAuthenticationFailure( AuthenticationFailureEvent $event )
-    {
-        $username = $this->authenticationUtils->getLastUsername();
-        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
-        if ($existingUser) {
-            error_log("Log In Denied: Wrong password for User #" . $existingUser->getId()  . " (" . $existingUser->getEmail() . ")");
-        } else {
-            error_log("Log In Denied: User doesn't exist: " . $username);
-        }
-    }
+	public function onAuthenticationFailure(AuthenticationFailureEvent $event)
+	{
+		$username = $this->authenticationUtils->getLastUsername();
+		$existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
+		if ($existingUser) {
+			if ($existingUser->getEmailConfirmed()) {
+				error_log("Log In Denied: Wrong password for User #" . $existingUser->getId()  . " (" . $existingUser->getEmail() . ")");
+			}
+		} else {
+			error_log("Log In Denied: User doesn't exist: " . $username);
+		}
+	}
 
-    public function onSecurityInteractiveLogin( InteractiveLoginEvent $event)
-    {
-        $user = $this->tokenStorage->getToken()->getUser();
-        $user_key_encoded = $user->getEncryptionKey();
+	public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+	{
+		$user = $this->tokenStorage->getToken()->getUser();
 
-        $password = $event->getRequest()->request->get('_password');
-        $password = sha1($password);
+		// Update your field here.
+		$user->setLastLogin(new \DateTime());
 
-        $protected_key = KeyProtectedByPassword::loadFromAsciiSafeString($user_key_encoded);
-        $user_key = $protected_key->unlockKey($password);
-        $user_key_encoded = $user_key->saveToAsciiSafeString();
+		// Persist the data to database.
+		$this->entityManager->persist($user);
+		$this->entityManager->flush();
 
-        $session = $this->container->get('session');
-        $session->set('encryption_key', $user_key_encoded);
-    }
+		$user_key_encoded = $user->getEncryptionKey();
+
+		$password = $event->getRequest()->request->get('_password');
+		$password = sha1($password);
+
+		$protected_key = KeyProtectedByPassword::loadFromAsciiSafeString($user_key_encoded);
+		$user_key = $protected_key->unlockKey($password);
+		$user_key_encoded = $user_key->saveToAsciiSafeString();
+
+		$session = $this->container->get('session');
+		$session->set('encryption_key', $user_key_encoded);
+	}
 }

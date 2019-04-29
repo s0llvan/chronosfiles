@@ -116,6 +116,11 @@ class User implements UserInterface, \Serializable
      */
     private $emailConfirmationLast;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastLogin;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -371,6 +376,18 @@ class User implements UserInterface, \Serializable
     public function setEmailConfirmationLast(?\DateTimeInterface $emailConfirmationLast): self
     {
         $this->emailConfirmationLast = $emailConfirmationLast;
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }

@@ -6,7 +6,8 @@
 <div class="ui grid stackable">
     <div class="five wide column"></div>
     <div class="five wide column">
-        <form action="{{ path('login') }}" method="post" class="ui form">
+        {# {{ form_start(form, {'attr': {'class': 'ui form'}, 'action': path('login') }) }} #}
+		<form action="{{ path('login') }}" method="post" class="ui form">
             <div class="field">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="_username" value="{{ last_username }}"/>
@@ -15,9 +16,14 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="_password" />
             </div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
 
-            {% if error %}
+			<div class="field">
+                <label for="captcha">Captcha</label>
+				<img src="{{ captcha.inline }}">
+                <input type="text" id="captcha" name="captcha" value="" required />
+            </div>
+            
+			{% if error %}
             <div class="ui form error field">
                 <div class="ui error message">
                     <p>{{ error.messageKey }}</p>
@@ -48,7 +54,8 @@
             <button type="submit" class="ui button">
                 <i class="fa fa-sign-in" aria-hidden="true"></i> Sign-in
             </button>
-        </form>
+		</form>
+        {# {{ form_end(form) }} #}
     </div>
 </div>
 {% endblock %}
