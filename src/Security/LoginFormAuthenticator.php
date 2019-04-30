@@ -78,7 +78,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 	{
 		$captcha = $request->request->get('captcha');
 
-		if ($captcha != $_SESSION['phrase']) {
+		if ($captcha != $request->getSession()->get('phrase')) {
 			throw new UserMessageAuthenticationException('Wrong captcha !');
 		}
 	}

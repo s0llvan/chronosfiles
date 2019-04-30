@@ -17,7 +17,7 @@ class SecurityController extends AbstractController
 	 */
 	public function login(AuthenticationUtils $helper, Request $request): Response
 	{
-		$captcha = $this->setCaptcha();
+		$captcha = $this->setCaptcha($request);
 
 		return $this->render('login.html.twig', [
 			// dernier username saisi (si il y en a un)
@@ -36,11 +36,11 @@ class SecurityController extends AbstractController
 		throw new \Exception('This should never be reached!');
 	}
 
-	public function setCaptcha()
+	public function setCaptcha(Request $request)
 	{
 		$captcha = new CaptchaBuilder();
 		$captcha->build();
-		$_SESSION['phrase'] = $captcha->getPhrase();
+		$request->getSession()->set('phrase', $captcha->getPhrase());
 
 		return $captcha;
 	}
