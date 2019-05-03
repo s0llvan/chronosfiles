@@ -52,7 +52,7 @@ class RegistrationController extends AbstractController
 				$role->setName('User');
 				$role->setSlug('ROLE_USER');
 				$role->setUploadFileSizeLimit(10240);
-				$role->setUploadStorageSizeLimit(307200);
+				$role->setStorageSizeLimit(307200);
 
 				$entityManager->persist($role);
 			}

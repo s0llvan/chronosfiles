@@ -27,7 +27,25 @@ class UploadController extends AbstractController
 
 		if ($form->isSubmitted() && $form->isValid()) {
 
+			$totalSize = $user->getUploadStorageSize();
 			$files = $form->get('fileName')->getData();
+
+			foreach ($files as $file) {
+				$fileOriginalName = $file->getClientOriginalName();
+				$fileSize = $file->getClientSize();
+
+				if ($user->getRole()->getUploadFileSizeLimit() && $fileSize > $user->getRole()->getUploadFileSizeLimit()) {
+					$this->get('session')->getFlashBag()->add('error', $fileOriginalName . ' is too large');
+					return $this->redirectToRoute('upload');
+				}
+
+				$totalSize += $fileSize;
+			}
+
+			if ($user->getRole()->getStorageSizeLimit() && $totalSize > $user->getRole()->getStorageSizeLimit()) {
+				$this->get('session')->getFlashBag()->add('error', 'Files size is too large');
+				return $this->redirectToRoute('upload');
+			}
 
 			$entityManager = $this->getDoctrine()->getManager();
 
@@ -69,6 +87,8 @@ class UploadController extends AbstractController
 
 				$entityManager->persist($fileEntity);
 			}
+
+			$user->setUploadStorageSize($totalSize);
 
 			$entityManager->flush();
 

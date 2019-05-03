@@ -9,7 +9,10 @@
             {{ form_widget(form.username) }}
             {{ form_widget(form.email) }}
 			{% if form.role is defined %}
-            {{ form_widget(form.role) }}
+            <div class="field">
+				<label>Role</label>
+				{{ form_widget(form.role) }}
+			</div>
 			{% endif %}
             {% set errors = [] %}
             {% for child in form.children %}

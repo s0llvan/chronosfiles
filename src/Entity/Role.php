@@ -31,7 +31,7 @@ class Role
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
-	private $uploadStorageSizeLimit;
+	private $storageSizeLimit;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="role", orphanRemoval=true)
@@ -77,14 +77,14 @@ class Role
 		return $this;
 	}
 
-	public function getUploadStorageSizeLimit(): ?int
+	public function getStorageSizeLimit(): ?int
 	{
-		return $this->uploadStorageSizeLimit;
+		return $this->storageSizeLimit;
 	}
 
-	public function setUploadStorageSizeLimit(?int $uploadStorageSizeLimit): self
+	public function setStorageSizeLimit(?int $storageSizeLimit): self
 	{
-		$this->uploadStorageSizeLimit = $uploadStorageSizeLimit;
+		$this->storageSizeLimit = $storageSizeLimit;
 
 		return $this;
 	}

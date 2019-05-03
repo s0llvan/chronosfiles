@@ -51,6 +51,7 @@ security:
         - { path: ^/register-confirmation, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/profil$, role: ROLE_USER }
+        - { path: ^/upload, role: ROLE_USER }
         - { path: ^/download, role: ROLE_USER }
         - { path: ^/files, role: ROLE_USER }
         - { path: ^/categories, role: ROLE_USER }

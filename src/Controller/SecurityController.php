@@ -20,9 +20,7 @@ class SecurityController extends AbstractController
 		$captcha = $this->setCaptcha($request);
 
 		return $this->render('login.html.twig', [
-			// dernier username saisi (si il y en a un)
 			'last_username' => $helper->getLastUsername(),
-			// La derniere erreur de connexion (si il y en a une)
 			'error' => $helper->getLastAuthenticationError(),
 			'captcha' => $captcha
 		]);

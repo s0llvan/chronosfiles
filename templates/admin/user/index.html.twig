@@ -10,6 +10,7 @@
 			<th>Username</th>
 			<th>Email</th>
 			<th>Last login</th>
+			<th class="center aligned">Storage</th>
 			<th class="center aligned">Role</th>
 			<th class="right aligned">Action</th>
 		<tr>
@@ -27,6 +28,15 @@
 			<td>
 				{% if is_granted(user.roles) %}
 				{{ user.lastLogin|date("d/m/Y H:i") }}
+				{% endif %}
+			</td>
+			<td class="center aligned">
+				{% if is_granted(user.roles) %}
+					{% if user.role.storageSizeLimit %}
+					{{ user.uploadStorageSizePercent }}%
+					{% else %}
+					No limit
+					{% endif %}
 				{% endif %}
 			</td>
 			<td class="center aligned">{{ user.role.name|upper }}</td>

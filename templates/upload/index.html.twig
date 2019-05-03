@@ -18,6 +18,15 @@
             {{ form_widget(form.category) }}
         </div>
 
+		{% if app.user.role.storageSizeLimit %}
+		<div class="ui indicating progress" data-percent="{{ app.user.uploadStorageSizePercent }}">
+			<div class="bar">
+				<div class="progress"></div>
+			</div>
+			<div class="label">Storage</div>
+		</div>
+		{% endif %}
+
         {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="ui form success field">
             <div class="ui success message">

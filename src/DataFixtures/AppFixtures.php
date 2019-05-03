@@ -27,7 +27,7 @@ class AppFixtures extends Fixture
 			$role->setName($name);
 			$role->setSlug($slug);
 			$role->setUploadFileSizeLimit($fileSizeLimit);
-			$role->setUploadStorageSizeLimit($storageSizeLimit);
+			$role->setStorageSizeLimit($storageSizeLimit);
 
 			$manager->persist($role);
 
@@ -71,8 +71,8 @@ class AppFixtures extends Fixture
 		return [
 			// $userData = [$slug, $name, $fileSizeLimit, $storageSizeLimit];
 			['Super Administrator', 'ROLE_SUPER_ADMIN', null, null],
-			['Administrator', 'ROLE_ADMIN', 10240, 614400],
-			['User', 'ROLE_USER', 10240, 307200],
+			['Administrator', 'ROLE_ADMIN', 10240000, 102400000],
+			['User', 'ROLE_USER', 1024000, 10240000],
 		];
 	}
 }

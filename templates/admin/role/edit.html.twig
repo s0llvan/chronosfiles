@@ -8,6 +8,8 @@
             {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
             {{ form_widget(form.name) }}
             {{ form_widget(form.slug) }}
+			{{ form_widget(form.uploadFileSizeLimit) }}
+			{{ form_widget(form.storageSizeLimit) }}
             {% set errors = [] %}
             {% for child in form.children %}
                 {% if child.vars.errors is defined %}

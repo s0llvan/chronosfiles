@@ -18,7 +18,6 @@ use App\Repository\FileRepository;
 use App\Form\FileDeleteType;
 use Wamania\ZipStreamedResponseBundle\Response\ZipStreamer\ZipStreamer;
 use Wamania\ZipStreamedResponseBundle\Response\ZipStreamer\ZipStreamerFile;
-use Wamania\ZipStreamedResponseBundle\Response\ZipStreamer\ZipStreamerBigFile;
 use Wamania\ZipStreamedResponseBundle\Response\ZipStreamedResponse;
 use App\Form\FileDownloadType;
 
@@ -234,9 +233,14 @@ class FileController extends AbstractController
 		}
 
 		if ($file->getUser() == $this->getUser()) {
-			$em = $this->getDoctrine()->getManager();
-			$em->remove($file);
-			$em->flush();
+
+			$totalSize = $this->getUser()->getUploadStorageSize();
+			$totalSize -= $file->getFileSize();
+			$this->getUser()->setUploadStorageSize($totalSize);
+
+			$entityManager = $this->getDoctrine()->getManager();
+			$entityManager->remove($file);
+			$entityManager->flush();
 
 			if (file_exists($filePath)) {
 				unlink($filePath);
@@ -320,8 +324,8 @@ class FileController extends AbstractController
 						}
 					}
 
-					$em = $this->getDoctrine()->getManager();
-					$em->flush();
+					$entityManager = $this->getDoctrine()->getManager();
+					$entityManager->flush();
 				}
 			}
 		}
@@ -345,11 +349,19 @@ class FileController extends AbstractController
 					}
 				);
 
-				$em = $this->getDoctrine()->getManager();
+				$totalSize = $this->getUser()->getUploadStorageSize();
+
+				$entityManager = $this->getDoctrine()->getManager();
 				foreach ($files as $file) {
-					$em->remove($file);
+
+					$totalSize -= $file->getFileSize();
+
+					$entityManager->remove($file);
 				}
-				$em->flush();
+
+				$this->getUser()->setUploadStorageSize($totalSize);
+
+				$entityManager->flush();
 			}
 		}
 

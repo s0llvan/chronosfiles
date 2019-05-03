@@ -120,10 +120,16 @@ class User implements UserInterface, \Serializable
 	 */
 	private $role;
 
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	private $uploadStorageSize;
+
 	public function __construct()
 	{
 		$this->files = new ArrayCollection();
 		$this->categories = new ArrayCollection();
+		$this->uploadStorageSize = 0;
 	}
 
 	public function getId(): int
@@ -392,5 +398,22 @@ class User implements UserInterface, \Serializable
 		$this->role = $role;
 
 		return $this;
+	}
+
+	public function getUploadStorageSize(): ?int
+	{
+		return $this->uploadStorageSize;
+	}
+
+	public function setUploadStorageSize(int $uploadStorageSize): self
+	{
+		$this->uploadStorageSize = $uploadStorageSize;
+
+		return $this;
+	}
+
+	public function getUploadStorageSizePercent(): ?int
+	{
+		return $this->getUploadStorageSize() * 100 / $this->role->getStorageSizeLimit();
 	}
 }

@@ -16,4 +16,6 @@ $(function () {
 
 	$('.ui.checkbox')
 		.checkbox();
+
+	$('.ui.progress').progress();
 });

@@ -16,6 +16,8 @@ class RoleAdminType extends AbstractType
 		$builder
 			->add('name', TextType::class)
 			->add('slug', TextType::class)
+			->add('uploadFileSizeLimit')
+			->add('storageSizeLimit')
 			->add('save', SubmitType::class, [
 				'attr' => [
 					'class' => 'ui button primary'
