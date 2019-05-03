@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+<div class="ui equal width grid">
+	<div class="column">
+		<a href="{{ path('admin_user') }}">
+			<div class="ui statistics">
+				<div class="statistic">
+					<div class="value">
+						<i class="users icon"></i> {{ users|length }}
+					</div>
+					<div class="label">
+						User{% if users|length > 1 %}s{% endif %}
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
+	<div class="column">
+		<div class="ui statistics">
+			<div class="statistic">
+				<div class="value">
+					<i class="file alternate icon"></i> {{ files|length }}
+				</div>
+				<div class="label">
+					File{% if files|length > 1 %}s{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<div class="ui statistics">
+			<div class="statistic">
+				<div class="value">
+					<i class="folder icon"></i> {{ categories|length }}
+				</div>
+				<div class="label">
+					Categor{% if categories|length > 1 %}ies{% else %}y{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<a href="{{ path('admin_role') }}">
+			<div class="ui statistics">
+				<div class="statistic">
+					<div class="value">
+						<i class="shield alternate icon"></i> {{ roles|length }}
+					</div>
+					<div class="label">
+						Role{% if roles|length > 1 %}s{% endif %}
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
+</div>
+{% endblock %}

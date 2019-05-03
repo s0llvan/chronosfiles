@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Roles{% endblock %}
+
+{% block body %}
+<table class="ui basic table stackable striped">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Slug</th>
+			<th>Users</th>
+			<th class="right aligned">Action</th>
+		<tr>
+	</thead>
+	<tbody>
+		{% for role in roles %}
+		<tr>
+			<td>{{ role.id }}</td>
+			<td>{{ role.name }}</td>
+			<td>{{ role.slug }}</td>
+			<td>{{ role.users|length }}</td>
+			<td class="right aligned">
+				<a href="{{ path('admin_role_edit', {'id': role.id}) }}">
+					<i class="pencil alternate icon"></i>
+				</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

@@ -7,49 +7,72 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Defuse\Crypto\KeyProtectedByPassword;
+use App\Entity\Role;
 
 class AppFixtures extends Fixture
 {
-    private $passwordEncoder;
+	private $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
+	public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+	{
+		$this->passwordEncoder = $passwordEncoder;
+	}
 
-    public function load(ObjectManager $manager)
-    {
-        foreach ($this->getUserData() as [$username, $password, $email, $roles]) {
-            $user = new User();
-            $user->setUsername($username);
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
-            $user->setEmail($email);
-            $user->setRoles($roles);
-            $user->setEmailConfirmed(true);
+	public function load(ObjectManager $manager)
+	{
+		$roles = [];
 
-            $password = sha1($password);
+		foreach ($this->getRoleData() as [$name, $slug, $fileSizeLimit, $storageSizeLimit]) {
+			$role = new Role();
+			$role->setName($name);
+			$role->setSlug($slug);
+			$role->setUploadFileSizeLimit($fileSizeLimit);
+			$role->setUploadStorageSizeLimit($storageSizeLimit);
 
-            $protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($password);
-            $protected_key_encoded = $protected_key->saveToAsciiSafeString();
+			$manager->persist($role);
 
-            $user->setEncryptionKey($protected_key_encoded);
+			$roles[$slug] = $role;
+		}
 
-            $manager->persist($user);
-            $this->addReference($username, $user);
-        }
+		foreach ($this->getUserData() as [$username, $password, $email, $role]) {
+			$user = new User();
+			$user->setUsername($username);
+			$user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+			$user->setEmail($email);
+			$user->setRole($roles[$role]);
+			$user->setEmailConfirmed(true);
 
-        $manager->flush();
-    }
+			$password = sha1($password);
 
-    private function getUserData() : array
-    {
-        return [
-            // $userData = [$username, $password, $email, $roles];
-            ['admin', 'admin', 'admin@local.host', ['ROLE_ADMIN']],
-            ['modo', 'user', 'modo@local.host', ['ROLE_MODO']],
-            ['user', 'user', 'user@local.host', ['ROLE_USER']],
-        ];
-    }
+			$protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($password);
+			$protected_key_encoded = $protected_key->saveToAsciiSafeString();
 
+			$user->setEncryptionKey($protected_key_encoded);
 
+			$manager->persist($user);
+			$this->addReference($username, $user);
+		}
+
+		$manager->flush();
+	}
+
+	private function getUserData(): array
+	{
+		return [
+			// $userData = [$username, $password, $email, $role];
+			['super_admin', 'super_admin', 'super_admin@local.host', 'ROLE_SUPER_ADMIN'],
+			['admin', 'admin', 'admin@local.host', 'ROLE_ADMIN'],
+			['user', 'user', 'user@local.host', 'ROLE_USER'],
+		];
+	}
+
+	private function getRoleData(): array
+	{
+		return [
+			// $userData = [$slug, $name, $fileSizeLimit, $storageSizeLimit];
+			['Super Administrator', 'ROLE_SUPER_ADMIN', null, null],
+			['Administrator', 'ROLE_ADMIN', 10240, 614400],
+			['User', 'ROLE_USER', 10240, 307200],
+		];
+	}
 }

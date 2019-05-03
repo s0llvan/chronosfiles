@@ -14,13 +14,15 @@ use App\Events;
 use Defuse\Crypto\KeyProtectedByPassword;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Repository\UserRepository;
+use App\Repository\RoleRepository;
+use App\Entity\Role;
 
 class RegistrationController extends AbstractController
 {
 	/**
 	 * @Route("/register", name="register")
 	 */
-	public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher, \Swift_Mailer $mailer, UserRepository $userRepository)
+	public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher, \Swift_Mailer $mailer, UserRepository $userRepository, RoleRepository $roleRepository)
 	{
 		$user = new User();
 		$form = $this->createForm(UserType::class, $user);
@@ -31,6 +33,42 @@ class RegistrationController extends AbstractController
 			$token = bin2hex(random_bytes(32));
 
 			$user->setEmailConfirmationToken($token);
+
+			$password = $passwordEncoder->encodePassword($user, $user->getPassword());
+			$user->setPassword($password);
+
+			$slug = 'ROLE_USER';
+
+			if ($userRepository->count([]) <= 0) {
+				$slug = 'ROLE_SUPER_ADMIN';
+			}
+
+			$entityManager = $this->getDoctrine()->getManager();
+
+			$role = $roleRepository->findOneBySlug($slug);
+
+			if (!$role) {
+				$role = new Role();
+				$role->setName('User');
+				$role->setSlug('ROLE_USER');
+				$role->setUploadFileSizeLimit(10240);
+				$role->setUploadStorageSizeLimit(307200);
+
+				$entityManager->persist($role);
+			}
+
+			$user->setRole($role);
+
+			$password = $form->get('password')->getData();
+			$password = sha1($password);
+
+			$protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($password);
+			$protected_key_encoded = $protected_key->saveToAsciiSafeString();
+
+			$user->setEncryptionKey($protected_key_encoded);
+
+			$entityManager->persist($user);
+			$entityManager->flush();
 
 			$confirmation_link = $this->generateUrl('register_confirmation', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -47,35 +85,14 @@ class RegistrationController extends AbstractController
 					),
 					'text/html'
 				);
-			$mailer->send($message);
+			if ($mailer->send($message)) {
+				$event = new GenericEvent($user);
+				$eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
 
-			$password = $passwordEncoder->encodePassword($user, $user->getPassword());
-			$user->setPassword($password);
-
-			$roles = ['ROLE_USER'];
-
-			if ($userRepository->count([]) <= 0) {
-				$roles = ['ROLE_ADMIN'];
+				$this->get('session')->getFlashBag()->add('success', 'Please click on the link sent by email to confirm your account');
+			} else {
+				$this->get('session')->getFlashBag()->add('error', 'Email confirmation cannot be send');
 			}
-
-			$user->setRoles($roles);
-
-			$password = $form->get('password')->getData();
-			$password = sha1($password);
-
-			$protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($password);
-			$protected_key_encoded = $protected_key->saveToAsciiSafeString();
-
-			$user->setEncryptionKey($protected_key_encoded);
-
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($user);
-			$em->flush();
-
-			$event = new GenericEvent($user);
-			$eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
-
-			$this->get('session')->getFlashBag()->add('success', 'Please click on the link sent by email to confirm your account');
 
 			return $this->redirectToRoute('register');
 		}
@@ -90,13 +107,13 @@ class RegistrationController extends AbstractController
 	 */
 	public function registerConfirmationAction(Request $request, $token, UserRepository $userRepository)
 	{
-		if ($user = $userRepository->findOneBy(['email_confirmation_token' => $token])) {
+		if ($user = $userRepository->findOneBy(['emailConfirmationToken' => $token])) {
 
 			$user->setEmailConfirmationToken(null);
 			$user->setEmailConfirmed(true);
 
-			$em = $this->getDoctrine()->getManager();
-			$em->flush();
+			$entityManager = $this->getDoctrine()->getManager();
+			$entityManager->flush();
 
 			$this->get('session')->getFlashBag()->add('success', 'Registration completed, you can now log in !');
 		} else {

@@ -38,6 +38,12 @@
                     Upload
                 </a>
                 <div class="right menu">
+					{% if is_granted("ROLE_ADMIN") %}
+					<a class="item" href="{{ path('admin') }}">
+                        <i class="cogs icon"></i>
+                        Administration
+                    </a>
+					{% endif %}
                     <a class="item" href="{{ path('logout') }}">
                         <i class="sign out alternate icon"></i>
                         Logout
@@ -85,6 +91,12 @@
                     <i class="upload icon"></i>
                     Upload
                 </a>
+				{% if is_granted("ROLE_ADMIN") %}
+				<a class="item" href="{{ path('admin') }}">
+					<i class="cogs icon"></i>
+					Administration
+				</a>
+				{% endif %}
                 <a class="item" href="{{ path('logout') }}">
                     <i class="sign out alternate icon"></i>
                     Logout
