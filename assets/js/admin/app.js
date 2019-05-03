@@ -1,3 +1,5 @@
+require('../../css/admin/app.scss');
+
 $(".delete-user").click(function () {
 	$('.ui.modal')
 		.modal({

@@ -53,8 +53,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 	{
 		return [
 			'username' => $request->request->get('_username'),
-			'password' => $request->request->get('_password'),
-			'captcha' => $request->request->get('captcha')
+			'password' => $request->request->get('_password')
 		];
 	}
 

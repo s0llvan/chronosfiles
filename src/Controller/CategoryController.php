@@ -10,74 +10,72 @@ use App\Entity\Category;
 
 class CategoryController extends AbstractController
 {
-    /**
-    * @Route("/categories", name="categories")
-    */
-    public function index(Request $request)
-    {
-        $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
+	/**
+	 * @Route("/categories", name="categories")
+	 */
+	public function index(Request $request)
+	{
+		$category = new Category();
+		$form = $this->createForm(CategoryType::class, $category);
+		$form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+		if ($form->isSubmitted() && $form->isValid()) {
 
-            $user = $this->getUser();
+			$user = $this->getUser();
 
-            $category->setUser($user);
+			$category->setUser($user);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
+			$entityManager = $this->getDoctrine()->getManager();
+			$entityManager->persist($category);
+			$entityManager->flush();
 
-            $category = new Category();
-            $form = $this->createForm(CategoryType::class, $category);
-        }
+			$category = new Category();
+			$form = $this->createForm(CategoryType::class, $category);
+		}
 
-        return $this->render('categories.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
+		return $this->render('categories.html.twig', [
+			'form' => $form->createView()
+		]);
+	}
 
-    /**
-    * @Route("/category/{id}", name="category_edit")
-    */
-    public function edit(Request $request, Category $category)
-    {
-        $user = $this->getUser();
-        if($category->getUser() == $user)
-        {
-            $form = $this->createForm(CategoryType::class, $category);
-            $form->handleRequest($request);
+	/**
+	 * @Route("/category/{id}", name="category_edit")
+	 */
+	public function edit(Request $request, Category $category)
+	{
+		$user = $this->getUser();
+		if ($category->getUser() == $user) {
+				$form = $this->createForm(CategoryType::class, $category);
+				$form->handleRequest($request);
 
-            if($form->isSubmitted() && $form->isValid()) {
+				if ($form->isSubmitted() && $form->isValid()) {
 
-                $em = $this->getDoctrine()->getManager();
-                $em->flush();
+					$entityManager = $this->getDoctrine()->getManager();
+					$entityManager->flush();
 
-                $category = new Category();
-                $form = $this->createForm(CategoryType::class, $category, [
-                    'action' => $this->generateUrl('categories')
-                ]);
-            }
-        }
+					$category = new Category();
+					$form = $this->createForm(CategoryType::class, $category, [
+						'action' => $this->generateUrl('categories')
+					]);
+				}
+			}
 
-        return $this->render('categories.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
+		return $this->render('categories.html.twig', [
+			'form' => $form->createView()
+		]);
+	}
 
-    /**
-    * @Route("/category/{id}/delete", name="category_delete")
-    */
-    public function delete(Request $request, Category $category)
-    {
-        $user = $this->getUser();
-        if($category->getUser() == $user)
-        {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($category);
-            $em->flush();
-        }
-        return $this->redirect($this->generateUrl('categories'));
-    }
+	/**
+	 * @Route("/category/{id}/delete", name="category_delete")
+	 */
+	public function delete(Request $request, Category $category)
+	{
+		$user = $this->getUser();
+		if ($category->getUser() == $user) {
+				$entityManager = $this->getDoctrine()->getManager();
+				$entityManager->remove($category);
+				$entityManager->flush();
+			}
+		return $this->redirect($this->generateUrl('categories'));
+	}
 }

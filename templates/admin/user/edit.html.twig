@@ -8,7 +8,9 @@
             {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
             {{ form_widget(form.username) }}
             {{ form_widget(form.email) }}
+			{% if form.role is defined %}
             {{ form_widget(form.role) }}
+			{% endif %}
             {% set errors = [] %}
             {% for child in form.children %}
                 {% if child.vars.errors is defined %}

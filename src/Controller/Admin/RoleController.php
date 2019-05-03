@@ -34,6 +34,9 @@ class RoleController extends AbstractController
 
 			$entityManager = $this->getDoctrine()->getManager();
 			$entityManager->flush();
+
+			$session = $this->get('session');
+			$session->getFlashBag()->add('success', 'Informations saved');
 		}
 
 		return $this->render('admin/role/edit.html.twig', [

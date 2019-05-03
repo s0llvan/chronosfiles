@@ -28,7 +28,9 @@ class UserController extends AbstractController
 	{
 		$this->denyAccessUnlessGranted($user->getRoles());
 
-		$form = $this->createForm(UserAdminType::class, $user);
+		$form = $this->createForm(UserAdminType::class, $user, [
+			'super_admin' => $this->isGranted('ROLE_SUPER_ADMIN')
+		]);
 		$form->handleRequest($request);
 
 		// Check if form is submitted and valid
@@ -36,6 +38,9 @@ class UserController extends AbstractController
 
 			$entityManager = $this->getDoctrine()->getManager();
 			$entityManager->flush();
+
+			$session = $this->get('session');
+			$session->getFlashBag()->add('success', 'Informations saved');
 		}
 
 		return $this->render('admin/user/edit.html.twig', [

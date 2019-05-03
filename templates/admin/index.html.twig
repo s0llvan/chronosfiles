@@ -2,8 +2,12 @@
 
 {% block title %}Administration{% endblock %}
 
+{% block stylesheets %}
+	{{ encore_entry_link_tags('admin') }}
+{% endblock %}
+
 {% block body %}
-<div class="ui equal width grid">
+<div class="ui equal width grid stackable">
 	<div class="column">
 		<a href="{{ path('admin_user') }}">
 			<div class="ui statistics">
@@ -42,6 +46,7 @@
 			</div>
 		</div>
 	</div>
+	{% if is_granted('ROLE_SUPER_ADMIN') %}
 	<div class="column">
 		<a href="{{ path('admin_role') }}">
 			<div class="ui statistics">
@@ -56,5 +61,6 @@
 			</div>
 		</a>
 	</div>
+	{% endif %}
 </div>
 {% endblock %}

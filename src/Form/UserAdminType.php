@@ -18,22 +18,25 @@ class UserAdminType extends AbstractType
 	{
 		$builder
 			->add('username', TextType::class)
-			->add('email', EmailType::class)
-			->add('role', EntityType::class, [
+			->add('email', EmailType::class);
+		if($options['super_admin']) {
+			$builder->add('role', EntityType::class, [
 				'class' => Role::class,
 				'choice_label' => 'name'
-			])
-			->add('save', SubmitType::class, [
-				'attr' => [
-					'class' => 'ui button primary'
-				]
 			]);
+		}
+		$builder->add('save', SubmitType::class, [
+			'attr' => [
+				'class' => 'ui button primary'
+			]
+		]);
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults([
 			'data_class' => User::class,
+			'super_admin' => false
 		]);
 	}
 }

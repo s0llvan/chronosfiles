@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\File;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,37 +12,36 @@ use App\Entity\Category;
 
 class FileType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $categories = $options['user']->getCategories();
+	public function buildForm(FormBuilderInterface $builder, array $options)
+	{
+		$categories = $options['user']->getCategories();
 
-        $builder
-        ->add('fileName', FormFileType::class, [
-            'multiple' => true
-        ])
-        ->add('category', EntityType::class, [
-            'class' => Category::class,
-            'choices' => $categories,
-            'choice_label' => 'name',
-            'attr' => [
-                'class' => 'ui fluid dropdown'
-            ],
-            'empty_data' => '',
-            'required' => false,
-            'choice_value' => null
-        ])
-        ->add('upload', SubmitType::class, [
-            'attr' => [
-                'class' => 'ui button'
-            ]
-        ])
-        ;
-    }
+		$builder
+			->add('fileName', FormFileType::class, [
+				'multiple' => true
+			])
+			->add('category', EntityType::class, [
+				'class' => Category::class,
+				'choices' => $categories,
+				'choice_label' => 'name',
+				'attr' => [
+					'class' => 'ui fluid dropdown'
+				],
+				'empty_data' => '',
+				'required' => false,
+				'choice_value' => null
+			])
+			->add('upload', SubmitType::class, [
+				'attr' => [
+					'class' => 'ui button'
+				]
+			]);
+	}
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'user' => null,
-        ]);
-    }
+	public function configureOptions(OptionsResolver $resolver)
+	{
+		$resolver->setDefaults([
+			'user' => null,
+		]);
+	}
 }

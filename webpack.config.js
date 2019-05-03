@@ -17,7 +17,7 @@ Encore
 
 	.addEntry('file', './assets/js/file.js')
 
-	.addEntry('admin', './assets/js/admin.js')
+	.addEntry('admin', './assets/js/admin/app.js')
 
 	// uncomment if you use Sass/SCSS files
 	.enableSassLoader()
