@@ -8,13 +8,34 @@ ChronosFiles is a web application hosting encrypted files
 [![GitHub stars](https://img.shields.io/github/stars/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/stargazers)
 [![GitHub license](https://img.shields.io/github/license/s0llvan/ChronosFiles.svg)](https://github.com/s0llvan/ChronosFiles/blob/master/LICENSE.md)
 
+## Features
+
+### Back office
+- User management
+- Role management
+  - Storage size
+  - Max upload file size
+
+### Front office
+- Registration
+- Log in
+- Reset password
+- Multiple files uploading
+- Files search system
+- Category management
+- Profil management
+
+
 ## Preview
 
 **Home page**
 ![Home page](https://i.ibb.co/B2081BG/Screenshot-2019-3-4-Chronos-Files-Index.png)
 
 **Files page**
-![Files pages](https://i.ibb.co/g7VgQzS/Screenshot-2019-4-18-Chronos-Files-Files.png)
+![Files pages](https://i.ibb.co/VJt7v3x/Screenshot-2019-5-6-Chronos-Files-Files.png)
+
+**Back office : Users**
+![Files pages](https://i.ibb.co/g6zkZH9/Screenshot-2019-5-6-Chronos-Files-Users.png)
 
 ## Documentation
 
